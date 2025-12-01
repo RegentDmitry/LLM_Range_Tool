@@ -1,71 +1,71 @@
-# LLM Range Tool - RAG система для GTO решений PLO4/PLO5
+# LLM Range Tool - RAG System for PLO4/PLO5 GTO Solutions
 
-Прототип RAG (Retrieval-Augmented Generation) системы для работы с базой данных GTO решений для Omaha (PLO4/PLO5).
+Prototype RAG (Retrieval-Augmented Generation) system for working with a database of GTO solutions for Omaha (PLO4/PLO5).
 
-## Описание
+## Description
 
-Система позволяет на основе текстового вопроса находить подходящие GTO деревья решений в базе данных, которая содержит:
-- 317 деревьев для PLO4
-- 83 дерева для PLO5
-- Покрытие: Cash, MTT, ICM, Exploitative стратегии
-- Различные форматы: Heads-Up, 6-Max, с ante, straddle и т.д.
+The system allows finding suitable GTO decision trees in the database based on text queries. The database contains:
+- 317 trees for PLO4
+- 83 trees for PLO5
+- Coverage: Cash, MTT, ICM, Exploitative strategies
+- Various formats: Heads-Up, 6-Max, with ante, straddle, etc.
 
-## Структура проекта
+## Project Structure
 
 ```
-├── config/                           # Конфигурация AWS
-│   ├── credentialsprivate.default.py # Шаблон для credentials
-│   └── credentialsprivate.py         # ⚠️  Ваши AWS credentials (не коммитится!)
-├── lib/                              # Библиотеки для работы с данными
-│   └── boto3_utils.py                # Утилиты для S3 и DynamoDB
-├── models/                           # Pydantic модели
-│   └── preflop_models.py             # Модели для RAG системы
-├── temp/                             # Локальные данные (не коммитятся)
-│   ├── preflop-tree-dev.json         # PLO4 деревья (317)
-│   ├── 5card-preflop-tree-dev.json   # PLO5 деревья (83)
-│   └── tree-tags-dev.json            # Справочник тегов
-├── main.py                           # Основной скрипт
-└── README_PREFLOP_MODELS.md          # Документация по моделям
+├── config/                           # AWS configuration
+│   ├── credentialsprivate.default.py # Credentials template
+│   └── credentialsprivate.py         # ⚠️  Your AWS credentials (not committed!)
+├── lib/                              # Data access libraries
+│   └── boto3_utils.py                # S3 and DynamoDB utilities
+├── models/                           # Pydantic models
+│   └── preflop_models.py             # Models for RAG system
+├── temp/                             # Local data (not committed)
+│   ├── preflop-tree-dev.json         # PLO4 trees (317)
+│   ├── 5card-preflop-tree-dev.json   # PLO5 trees (83)
+│   └── tree-tags-dev.json            # Tags reference
+├── main.py                           # Main script
+└── README_PREFLOP_MODELS.md          # Models documentation
 ```
 
-## Быстрый старт
+## Quick Start
 
-### 1. Настройка credentials
+### 1. Setup Credentials
 
-Скопируйте шаблон и заполните ваши AWS credentials:
+Copy the template and fill in your AWS credentials:
 
 ```bash
 cp config/credentialsprivate.default.py config/credentialsprivate.py
 ```
 
-Отредактируйте `config/credentialsprivate.py`:
+Edit `config/credentialsprivate.py`:
 
 ```python
-AwsAccessKey = 'ваш-aws-access-key'
-AwsSecret = 'ваш-aws-secret'
+AwsAccessKey = 'your-aws-access-key'
+AwsSecret = 'your-aws-secret'
 AwsRegion = 'eu-central-1'
 ```
 
-### 2. Установка зависимостей
+### 2. Install Dependencies
 
 ```bash
 pip install boto3 pydantic pydantic-ai
 ```
 
-### 3. Использование
+### 3. Usage
 
 ```python
 from models import PreflopTree, PreflopQuery, parse_tree_from_dynamodb
 from lib import get_dynamodb_record
 import json
 
-# Работа с локальными данными
+# Working with local data
 with open('temp/preflop-tree-dev.json', 'r') as f:
     trees_data = json.load(f)
 
 trees = [parse_tree_from_dynamodb(item) for item in trees_data]
 
-# Пример поиска
+# Search example
 query = PreflopQuery(
     game_type="plo4",
     number_of_players=6,
@@ -73,19 +73,19 @@ query = PreflopQuery(
     max_results=10
 )
 
-# Ваша RAG логика здесь...
+# Your RAG logic here...
 ```
 
-## AWS Ресурсы
+## AWS Resources
 
-### DynamoDB таблицы:
-- `preflop-tree-dev` - деревья PLO4
-- `5card-preflop-tree-dev` - деревья PLO5
-- `tree-tags-dev` - справочник тегов
+### DynamoDB Tables:
+- `preflop-tree-dev` - PLO4 trees
+- `5card-preflop-tree-dev` - PLO5 trees
+- `tree-tags-dev` - tags reference
 
 ### S3 Buckets:
 
-**Деревья (JSON):**
+**Trees (JSON):**
 - PLO4: `preflop-trees`
 - PLO5: `plo5-preflop-trees`
 
@@ -93,24 +93,24 @@ query = PreflopQuery(
 - PLO4: `postflop-ranges-json`
 - PLO5: `plo5-preflop-ranges`
 
-## Документация
+## Documentation
 
-Подробная документация по моделям: [README_PREFLOP_MODELS.md](README_PREFLOP_MODELS.md)
+Detailed models documentation: [README_PREFLOP_MODELS.md](README_PREFLOP_MODELS.md)
 
-## Безопасность
+## Security
 
-⚠️ **ВАЖНО:** Никогда не коммитьте файл `config/credentialsprivate.py` в git!
+⚠️ **IMPORTANT:** Never commit the `config/credentialsprivate.py` file to git!
 
-Файл уже добавлен в `.gitignore`, но всегда проверяйте перед коммитом:
+The file is already added to `.gitignore`, but always check before committing:
 
 ```bash
 git status --ignored
 ```
 
-## Разработка
+## Development
 
-Для локальной разработки без AWS можно использовать JSON файлы из папки `temp/`.
+For local development without AWS, you can use JSON files from the `temp/` folder.
 
-## Лицензия
+## License
 
 Private project
