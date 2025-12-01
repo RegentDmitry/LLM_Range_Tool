@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Library for working with AWS S3 and DynamoDB
+Library for working with AWS S3 and DynamoDB, and data loading
 """
 
 from .boto3_utils import (
@@ -14,6 +14,8 @@ from .boto3_utils import (
     delete_s3,
     delete_dynamodb_record,
 )
+from .data_loader import TreeDataLoader
+from .query_agent import TreeQueryAgent
 
 __all__ = [
     'list_files_in_bucket',
@@ -23,4 +25,6 @@ __all__ = [
     'get_all_dynamodb_keys',
     'delete_s3',
     'delete_dynamodb_record',
+    'TreeDataLoader',
+    'TreeQueryAgent',
 ]
