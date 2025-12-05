@@ -1,4 +1,19 @@
-# Poker Decision Tree Analyzer - Техническая архитектура
+# RangeLab AI - Техническая архитектура
+
+```
+╔═══════════════════════════════════════╗
+║                                       ║
+║            RANGELAB AI                ║
+║         ─────────────────             ║
+║    AI-Powered Range Analysis          ║
+║    Advanced Research Tool             ║
+║                                       ║
+╚═══════════════════════════════════════╝
+```
+
+**Домен:** rangelab.ai
+**GitHub:** github.com/RegentDmitry/rangelab-ai
+**Tagline:** "Master Your Poker Strategy with AI"
 
 ---
 
@@ -928,8 +943,66 @@ SESSION_TTL=3600
 
 ---
 
+## 📦 GitHub Repository
+
+### Описание для GitHub:
+
+```markdown
+# RangeLab AI
+
+AI-Powered Range Analysis • Advanced Research Tool
+
+Intelligent poker range analysis platform using decision trees
+and LLM-generated insights. Built for serious players and
+researchers studying poker strategy.
+
+🎯 Features:
+• Decision tree visualization with Mermaid.js
+• AI-powered strategy analysis via OpenAI
+• PLO4/PLO5 support with 85-feature bucketing system
+• Lead vs NoLead comparison scenarios
+• Interactive follow-up chat with AI
+
+🛠️ Tech Stack:
+• Backend: Python, FastAPI, PostgreSQL
+• Frontend: Next.js 14, TypeScript, React 18
+• AI: OpenAI GPT-4o-mini, LangChain
+• Deployment: Railway (backend), Vercel (frontend)
+
+⚠️ Important: RangeLab AI is a POST-GAME analysis tool for learning
+and research. It is NOT real-time assistance (RTA) and should never
+be used during live play.
+
+📚 Documentation: See PROJECT_ARCHITECTURE.md
+```
+
+### GitHub Topics:
+
+```
+poker
+poker-strategy
+decision-tree
+machine-learning
+ai
+llm
+openai
+fastapi
+nextjs
+typescript
+range-analysis
+plo
+omaha
+poker-ai
+analytics
+postgresql
+react
+```
+
+---
+
 ## 🎯 Следующие шаги
 
-1. Создать монорепо структуру
-2. Зарегистрироваться на платформах (GitHub, Vercel, Railway, Clerk, Stripe, OpenAI)
-3. Начать Фазу 1: Backend Foundation
+1. Создать GitHub репозиторий `rangelab-ai`
+2. Создать монорепо структуру
+3. Зарегистрироваться на платформах (GitHub, Vercel, Railway, Clerk, OpenAI)
+4. Начать Фазу 1: Backend Foundation
