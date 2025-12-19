@@ -187,8 +187,9 @@ cp config/credentialsprivate.default.py config/credentialsprivate.py
 ## Documentation
 
 - [Models Documentation](README_PREFLOP_MODELS.md) - Detailed Pydantic models reference
-- [test_rag.py](test_rag.py) - Interactive testing script
-- [example_simple.py](example_simple.py) - Basic usage example
+- [PyCharm Guide](PYCHARM_GUIDE.md) - Setup guide for PyCharm IDE
+- [Quick Start](QUICKSTART.md) - Quick start guide
+- [Project Architecture](PROJECT_ARCHITECTURE.md) - Future web service architecture
 
 ## Development
 
