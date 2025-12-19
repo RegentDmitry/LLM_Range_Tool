@@ -12,5 +12,9 @@ openai>=1.0.0
 # Anthropic Claude (optional)
 anthropic>=0.18.0
 
+# Video RAG system
+chromadb>=0.4.0
+assemblyai>=0.17.0
+
 # Utilities
 python-dotenv>=1.0.0

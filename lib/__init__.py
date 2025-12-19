@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Library for working with AWS S3 and DynamoDB, and data loading
+Library for working with AWS S3 and DynamoDB, data loading, and video RAG
 """
 
 from .boto3_utils import (
@@ -16,6 +16,9 @@ from .boto3_utils import (
 )
 from .data_loader import TreeDataLoader
 from .query_agent import TreeQueryAgent
+from .video_processor import VideoProcessor
+from .video_processor_assemblyai import VideoProcessorAssemblyAI
+from .video_rag import VideoRAG
 
 __all__ = [
     'list_files_in_bucket',
@@ -27,4 +30,7 @@ __all__ = [
     'delete_dynamodb_record',
     'TreeDataLoader',
     'TreeQueryAgent',
+    'VideoProcessor',
+    'VideoProcessorAssemblyAI',
+    'VideoRAG',
 ]

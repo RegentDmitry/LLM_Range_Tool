@@ -48,6 +48,14 @@ log/
 temp/
 *.tmp
 
+# ChromaDB vector databases
+chroma_db/
+chroma_db_assemblyai/
+
+# Video transcripts (JSON files)
+transcripts/
+transcripts_assemblyai/
+
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb
