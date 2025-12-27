@@ -20,9 +20,9 @@ class PokerTaxonomy:
     def __init__(self, taxonomy_path: Optional[str] = None):
         """Load taxonomy from YAML file"""
         if taxonomy_path is None:
-            # Default path relative to this file
+            # Default path: data/poker_taxonomy.yaml
             base_dir = Path(__file__).parent.parent
-            taxonomy_path = base_dir / "poker_taxonomy.yaml"
+            taxonomy_path = base_dir / "data" / "poker_taxonomy.yaml"
 
         with open(taxonomy_path, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
