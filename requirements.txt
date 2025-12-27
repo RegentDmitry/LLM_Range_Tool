@@ -11,6 +11,9 @@ assemblyai>=0.17.0
 # PostgreSQL + pgvector
 psycopg2-binary>=2.9.0
 
+# Neo4j Graph Database
+neo4j>=5.0.0
+
 # Taxonomy
 pyyaml>=6.0.0
 

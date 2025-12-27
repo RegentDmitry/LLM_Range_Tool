@@ -4,6 +4,7 @@
 """
 Conversational RAG system using Pydantic AI
 PostgreSQL + pgvector for vector search
+Neo4j Knowledge Graph for relationship-based search
 """
 
 import os
@@ -13,6 +14,7 @@ from dataclasses import dataclass
 
 import psycopg2
 from .taxonomy import get_taxonomy
+from .graph_db import PokerGraphDB
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent, RunContext
 from pydantic_ai.models.openai import OpenAIModel
@@ -62,14 +64,33 @@ class RAGDependencies:
     db_connection: Any
     openai_client: OpenAI
     conversation_history: List[ConversationMessage]
+    graph_db: Optional[PokerGraphDB] = None
 
 
 # ============================================================================
 # Database Configuration
 # ============================================================================
 
+def get_windows_host_ip() -> str:
+    """Get Windows host IP from WSL (for PostgreSQL connection)"""
+    try:
+        with open('/proc/net/route', 'r') as f:
+            for line in f:
+                fields = line.strip().split()
+                if fields[1] == '00000000':  # Default route
+                    # Convert hex to IP
+                    hex_ip = fields[2]
+                    ip = '.'.join([str(int(hex_ip[i:i+2], 16)) for i in range(6, -1, -2)])
+                    return ip
+    except:
+        pass
+    return "localhost"
+
+# Try Windows host IP first (for WSL), fallback to localhost
+_host = os.getenv("POSTGRES_HOST", get_windows_host_ip())
+
 DB_CONFIG = {
-    "host": "localhost",
+    "host": _host,
     "port": 5432,
     "database": "rangelab",
     "user": "postgres",
@@ -85,13 +106,15 @@ class ConversationalVideoRAG:
     """
     Conversational RAG for poker video search
     Uses PostgreSQL + pgvector for vector search
+    Neo4j Knowledge Graph for relationship-based search
     """
 
     def __init__(
         self,
         openai_api_key: Optional[str] = None,
         model_name: str = "gpt-4o",
-        temperature: float = 0.7
+        temperature: float = 0.7,
+        use_graph: bool = True
     ):
         """
         Initialize Conversational RAG
@@ -100,6 +123,7 @@ class ConversationalVideoRAG:
             openai_api_key: OpenAI API key
             model_name: LLM model (gpt-4o-mini, gpt-4o, gpt-4)
             temperature: LLM temperature (0-1)
+            use_graph: Enable Neo4j Knowledge Graph features
         """
         self.api_key = openai_api_key or os.getenv('OPENAI_API_KEY')
         if not self.api_key:
@@ -107,12 +131,25 @@ class ConversationalVideoRAG:
 
         self.model_name = model_name
         self.temperature = temperature
+        self.use_graph = use_graph
 
         # OpenAI client for embeddings
         self.openai_client = OpenAI(api_key=self.api_key)
 
         # PostgreSQL connection
         self.conn = psycopg2.connect(**DB_CONFIG)
+
+        # Neo4j Graph Database (optional)
+        self.graph_db: Optional[PokerGraphDB] = None
+        if use_graph:
+            try:
+                self.graph_db = PokerGraphDB()
+                if not self.graph_db.verify_connection():
+                    print("   Warning: Neo4j connection failed, graph features disabled")
+                    self.graph_db = None
+            except Exception as e:
+                print(f"   Warning: Neo4j unavailable ({e}), graph features disabled")
+                self.graph_db = None
 
         # Conversation history
         self.conversation_history: List[ConversationMessage] = []
@@ -125,9 +162,10 @@ class ConversationalVideoRAG:
             cur.execute("SELECT COUNT(*) FROM transcripts WHERE embedding IS NOT NULL")
             chunk_count = cur.fetchone()[0]
 
-        print(f"Conversational RAG initialized (pgvector)")
+        print(f"Conversational RAG initialized")
         print(f"   Model: {model_name}")
-        print(f"   Chunks with embeddings: {chunk_count}")
+        print(f"   Chunks: {chunk_count}")
+        print(f"   Graph: {'enabled' if self.graph_db else 'disabled'}")
 
     def _create_agent(self) -> Agent:
         """Create Pydantic AI agent with tools"""
@@ -232,6 +270,151 @@ class ConversationalVideoRAG:
                 for msg in recent
             ])
 
+        # ====================================================================
+        # Graph-based tools (Neo4j)
+        # ====================================================================
+
+        @agent.tool
+        async def find_learning_path(
+            ctx: RunContext[RAGDependencies],
+            concept: str
+        ) -> str:
+            """
+            Find what concepts to learn BEFORE a target concept.
+            Use this when user asks "what should I learn before X?" or "prerequisites for X".
+
+            Args:
+                concept: Target concept name (e.g., "4-Bet", "Squeeze", "GTO")
+
+            Returns:
+                Learning path with prerequisites
+            """
+            if not ctx.deps.graph_db:
+                return "Graph database not available."
+
+            path = ctx.deps.graph_db.find_learning_path(concept)
+            if not path:
+                return f"No prerequisites found for '{concept}'. This may be a foundational concept."
+
+            # Format learning path
+            result = f"Learning path to master '{concept}':\n"
+            # Sort by depth descending (learn basics first)
+            sorted_path = sorted(path, key=lambda x: x['depth'], reverse=True)
+            for i, step in enumerate(sorted_path, 1):
+                result += f"  {i}. {step['concept']}\n"
+            result += f"  {len(sorted_path) + 1}. {concept} (target)"
+
+            return result
+
+        @agent.tool
+        async def find_related_videos(
+            ctx: RunContext[RAGDependencies],
+            video_title: str,
+            limit: int = 5
+        ) -> str:
+            """
+            Find videos similar to a given video through shared concepts.
+            Use when user asks "what else should I watch?" or "similar videos to X".
+
+            Args:
+                video_title: Title or part of title of the source video
+                limit: Max number of recommendations
+
+            Returns:
+                List of related videos with shared concepts
+            """
+            if not ctx.deps.graph_db:
+                return "Graph database not available."
+
+            # Find video ID by title
+            with ctx.deps.graph_db.driver.session(database=ctx.deps.graph_db.database) as session:
+                result = session.run("""
+                    MATCH (v:Video) WHERE toLower(v.title) CONTAINS toLower($title)
+                    RETURN v.id as id, v.title as title LIMIT 1
+                """, title=video_title)
+                video = result.single()
+
+            if not video:
+                return f"Video '{video_title}' not found in the knowledge graph."
+
+            related = ctx.deps.graph_db.find_related_videos(video['id'], limit)
+            if not related:
+                return f"No related videos found for '{video['title']}'."
+
+            result = f"Videos related to '{video['title']}':\n\n"
+            for i, r in enumerate(related, 1):
+                concepts = ', '.join(r['concepts'][:5])
+                result += f"[{i}] {r['video']['title']}\n"
+                result += f"    Shared concepts ({r['shared_concepts']}): {concepts}\n"
+                result += f"    URL: {r['video'].get('url', 'N/A')}\n\n"
+
+            return result
+
+        @agent.tool
+        async def find_videos_by_concepts(
+            ctx: RunContext[RAGDependencies],
+            concepts: str
+        ) -> str:
+            """
+            Find videos that cover MULTIPLE concepts together.
+            Use when user asks about intersection of topics, e.g., "3-bet AND out of position".
+
+            Args:
+                concepts: Comma-separated list of concepts (e.g., "3-Bet, Out of Position")
+
+            Returns:
+                Videos covering all specified concepts
+            """
+            if not ctx.deps.graph_db:
+                return "Graph database not available."
+
+            # Parse concepts
+            concept_list = [c.strip() for c in concepts.split(',')]
+
+            videos = ctx.deps.graph_db.find_videos_by_multiple_concepts(concept_list)
+            if not videos:
+                return f"No videos found covering all concepts: {concepts}"
+
+            result = f"Videos covering [{', '.join(concept_list)}]:\n\n"
+            for i, v in enumerate(videos[:10], 1):
+                result += f"[{i}] {v['video']['title']} ({v['video'].get('category', 'N/A')})\n"
+                result += f"    URL: {v['video'].get('url', 'N/A')}\n\n"
+
+            return result
+
+        @agent.tool
+        async def get_concept_videos(
+            ctx: RunContext[RAGDependencies],
+            concept: str,
+            limit: int = 5
+        ) -> str:
+            """
+            Find videos that discuss a specific poker concept.
+            Returns videos sorted by how prominently they cover the concept.
+
+            Args:
+                concept: Concept name (e.g., "3-Bet", "Equity Realization", "Squeeze")
+                limit: Max videos to return
+
+            Returns:
+                Videos about this concept with relevance weights
+            """
+            if not ctx.deps.graph_db:
+                return "Graph database not available."
+
+            videos = ctx.deps.graph_db.find_videos_by_concept(concept)
+            if not videos:
+                return f"No videos found about '{concept}'."
+
+            result = f"Videos about '{concept}':\n\n"
+            for i, v in enumerate(videos[:limit], 1):
+                weight = v['weight']
+                importance = "main topic" if weight >= 0.8 else "discussed" if weight >= 0.5 else "mentioned"
+                result += f"[{i}] {v['video']['title']} ({importance})\n"
+                result += f"    URL: {v['video'].get('url', 'N/A')}\n\n"
+
+            return result
+
         return agent
 
     def _translate_query(self, query: str) -> TranslatedQuery:
@@ -276,11 +459,17 @@ If already English, return the same text. Keep poker terminology accurate."""
 
     def _get_system_prompt(self) -> str:
         """Get system prompt for poker domain"""
-        return """You are an expert poker coach assistant. You help players find and understand poker concepts from educational videos.
+        graph_section = """
+3. Find learning paths using find_learning_path (what to learn before a concept)
+4. Find related videos using find_related_videos (similar content through shared concepts)
+5. Find videos by multiple concepts using find_videos_by_concepts
+6. Find videos about a concept using get_concept_videos""" if self.graph_db else ""
+
+        return f"""You are an expert poker coach assistant. You help players find and understand poker concepts from educational videos.
 
 Your capabilities:
 1. Search poker educational videos using the search_videos tool
-2. Remember conversation context using get_conversation_context tool
+2. Remember conversation context using get_conversation_context tool{graph_section}
 
 CRITICAL RULES:
 - Base your answer ONLY on video transcripts - don't add external knowledge
@@ -291,6 +480,9 @@ Guidelines:
 - Always search videos before answering poker questions
 - Use poker terminology accurately
 - Videos cover both PLO4 (4-card) and PLO5 (5-card) Omaha
+- When user asks "what to learn before X" or "prerequisites", use find_learning_path
+- When user asks "similar videos" or "what else to watch", use find_related_videos
+- When user asks about multiple topics together, use find_videos_by_concepts
 
 Response format:
 - Give a SHORT summary (2-3 sentences) of what the videos cover on this topic
@@ -321,7 +513,8 @@ Response format:
         deps = RAGDependencies(
             db_connection=self.conn,
             openai_client=self.openai_client,
-            conversation_history=self.conversation_history
+            conversation_history=self.conversation_history,
+            graph_db=self.graph_db
         )
 
         # Build prompt with translation info
@@ -383,18 +576,32 @@ Please search using the translated query and respond in {translated.source_langu
             cur.execute("SELECT COUNT(*) FROM videos")
             video_count = cur.fetchone()[0]
 
-        return {
+        stats = {
             "total_videos": video_count,
             "total_chunks": chunk_count,
             "model": self.model_name,
             "memory_messages": len(self.conversation_history),
-            "backend": "postgresql+pgvector"
+            "backend": "postgresql+pgvector",
+            "graph_enabled": self.graph_db is not None
         }
 
+        # Add graph stats if available
+        if self.graph_db:
+            try:
+                graph_stats = self.graph_db.get_stats()
+                stats["graph_concepts"] = graph_stats.get("concepts", 0)
+                stats["graph_mentions"] = graph_stats.get("mentions", 0)
+            except:
+                pass
+
+        return stats
+
     def close(self):
-        """Close database connection"""
+        """Close database connections"""
         if self.conn:
             self.conn.close()
+        if self.graph_db:
+            self.graph_db.close()
 
 
 # ============================================================================

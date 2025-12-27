@@ -54,10 +54,9 @@ async def chat_loop(rag: ConversationalVideoRAG):
     print("\n💡 Tips:")
     print("   • Ask in any language (auto-translation to English for search)")
     print("   • Example: 'как играть AAxx на префлопе?'")
-    print("   • Context is remembered across questions")
-    print("   • Type 'clear' to reset conversation")
-    print("   • Type 'stats' to see system stats")
-    print("   • Type 'exit' to quit")
+    print("   • Ask 'what should I learn before X?' for learning paths")
+    print("   • Ask 'similar videos to X' for recommendations")
+    print("   • Type 'clear' to reset, 'stats' for info, 'exit' to quit")
     print()
     print("-" * 70)
 
@@ -86,6 +85,10 @@ async def chat_loop(rag: ConversationalVideoRAG):
                 print(f"   Videos: {stats['total_videos']}")
                 print(f"   Chunks: {stats['total_chunks']}")
                 print(f"   Messages in memory: {stats['memory_messages']}")
+                print(f"   Graph: {'enabled' if stats.get('graph_enabled') else 'disabled'}")
+                if stats.get('graph_enabled'):
+                    print(f"   Graph concepts: {stats.get('graph_concepts', 0)}")
+                    print(f"   Graph mentions: {stats.get('graph_mentions', 0)}")
                 continue
 
             # Get answer

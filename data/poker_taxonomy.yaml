@@ -126,9 +126,16 @@ concepts:
       - "defend big blind"
       - "defending the big blind"
       - "BB defend"
+      - "защита ББ"
+      - "защита большого блайнда"
+      - "игра на блайндах"
+      - "игра с блайндов"
+      - "playing from blinds"
     related:
       - "big blind"
       - "out of position"
+      - "facing steal"
+      - "steal"
     category: "preflop_action"
 
   facing_3bet:
@@ -163,9 +170,33 @@ concepts:
       - "blind steal"
       - "steal attempt"
       - "SB steal"
+      - "BTN steal"
+      - "CO steal"
+      - "стил"
+      - "стилинг"
+      - "воровство блайндов"
     related:
       - "button"
       - "blinds"
+      - "late position"
+      - "defending the bb"
+    category: "preflop_action"
+
+  facing_steal:
+    name: "Facing a Steal"
+    aliases:
+      - "vs steal"
+      - "against steal"
+      - "defend vs steal"
+      - "playing vs steal"
+      - "против стила"
+      - "игра против стила"
+      - "защита от стила"
+    related:
+      - "steal"
+      - "defending the bb"
+      - "3-bet"
+      - "cold call"
     category: "preflop_action"
 
   # ============================================
