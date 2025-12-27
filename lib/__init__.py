@@ -18,7 +18,8 @@ from .data_loader import TreeDataLoader
 from .query_agent import TreeQueryAgent
 from .video_processor import VideoProcessor
 from .video_processor_assemblyai import VideoProcessorAssemblyAI
-from .video_rag import VideoRAG
+from .conversational_rag import ConversationalVideoRAG
+from .taxonomy import PokerTaxonomy, get_taxonomy
 
 __all__ = [
     'list_files_in_bucket',
@@ -32,5 +33,7 @@ __all__ = [
     'TreeQueryAgent',
     'VideoProcessor',
     'VideoProcessorAssemblyAI',
-    'VideoRAG',
+    'ConversationalVideoRAG',
+    'PokerTaxonomy',
+    'get_taxonomy',
 ]

@@ -48,9 +48,7 @@ log/
 temp/
 *.tmp
 
-# ChromaDB vector databases
-chroma_db/
-chroma_db_assemblyai/
+# Local data (vectors are in PostgreSQL)
 
 # Video transcripts (JSON files)
 transcripts/

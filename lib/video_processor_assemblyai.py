@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import List, Optional, Tuple
 from datetime import datetime
 import assemblyai as aai
+from tqdm import tqdm
 
 from models.video_models_assemblyai import (
     VideoTranscriptAssemblyAI,
@@ -347,8 +348,8 @@ class VideoProcessorAssemblyAI:
         self,
         transcript: VideoTranscriptAssemblyAI,
         chunk_duration: float = 60.0,
-        overlap: float = 5.0,
-        use_chapters: bool = True
+        overlap: float = 10.0,
+        use_chapters: bool = False
     ) -> List[VideoChunkAssemblyAI]:
         """
         Split transcript into chunks for RAG system
@@ -362,21 +363,21 @@ class VideoProcessorAssemblyAI:
         Returns:
             List of VideoChunkAssemblyAI with enhanced metadata
         """
-        print(f"📦 Creating chunks for video: {transcript.title}")
+        print(f"📦 Creating chunks for video: {transcript.title}", flush=True)
 
         chunks = []
 
         if use_chapters and transcript.chapters:
             # Use chapter-based chunking
-            print(f"   Using chapter-based chunking ({len(transcript.chapters)} chapters)")
+            print(f"   Using chapter-based chunking ({len(transcript.chapters)} chapters)", flush=True)
             chunks = self._chunk_by_chapters(transcript)
         else:
             # Use time-based chunking
-            print(f"   Using time-based chunking (duration: {chunk_duration}s, overlap: {overlap}s)")
+            print(f"   Using time-based chunking (duration: {chunk_duration}s, overlap: {overlap}s)", flush=True)
             chunks = self._chunk_by_time(transcript, chunk_duration, overlap)
 
-        print(f"✓ Created {len(chunks)} chunks")
-        print()
+        print(f"✓ Created {len(chunks)} chunks", flush=True)
+        print(flush=True)
 
         return chunks
 
@@ -419,6 +420,9 @@ class VideoProcessorAssemblyAI:
                 sentiment_confidence = sum(s.confidence for s in chapter_sentiments) / len(chapter_sentiments)
 
             # Create chunk
+            # Use FULL TEXT from segments, not just summary!
+            chunk_text = " ".join([s.text for s in chunk_segments])
+
             chunk = VideoChunkAssemblyAI(
                 chunk_id=f"{transcript.video_id}_chapter_{chapter.chapter_id}",
                 video_id=transcript.video_id,
@@ -426,7 +430,7 @@ class VideoProcessorAssemblyAI:
                 video_url=transcript.url,
                 start_time=chapter.start,
                 end_time=chapter.end,
-                text=chapter.summary if chapter.summary else " ".join([s.text for s in chunk_segments]),
+                text=chunk_text,  # FULL TEXT, not summary
                 segment_ids=[s.id for s in chunk_segments],
                 chapter_id=chapter.chapter_id,
                 chapter_headline=chapter.headline,
@@ -451,7 +455,13 @@ class VideoProcessorAssemblyAI:
         current_start = 0.0
         chunk_counter = 0
 
-        while current_start < transcript.duration:
+        # Calculate total number of chunks
+        total_chunks = int((transcript.duration - overlap) / (chunk_duration - overlap)) + 1
+
+        # Progress bar
+        pbar = tqdm(total=total_chunks, desc="   Creating chunks", unit="chunk", ncols=80, bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} [{percentage:3.0f}%]')
+
+        while current_start < transcript.duration and chunk_counter < total_chunks * 2:  # Safety limit
             chunk_end = min(current_start + chunk_duration, transcript.duration)
 
             # Find segments for this chunk
@@ -501,11 +511,20 @@ class VideoProcessorAssemblyAI:
                     sentiment_confidence=sentiment_confidence
                 )
                 chunks.append(chunk)
+                pbar.update(1)
                 chunk_counter += 1
 
             # Move to next chunk with overlap
-            current_start = chunk_end - overlap
+            next_start = chunk_end - overlap
 
+            # Safety check: ensure we're moving forward
+            if next_start <= current_start:
+                print(f"\n⚠️  Warning: current_start not advancing! current={current_start:.2f}, next={next_start:.2f}", flush=True)
+                break
+
+            current_start = next_start
+
+        pbar.close()
         return chunks
 
     def process_video(
@@ -516,8 +535,8 @@ class VideoProcessorAssemblyAI:
         url: str,
         language: str = "en",
         chunk_duration: float = 60.0,
-        overlap: float = 5.0,
-        use_chapters: bool = True
+        overlap: float = 10.0,
+        use_chapters: bool = False
     ) -> Tuple[VideoTranscriptAssemblyAI, List[VideoChunkAssemblyAI]]:
         """
         Full video processing: transcription + chunking with all AssemblyAI features
@@ -706,6 +725,142 @@ class VideoProcessorAssemblyAI:
         print(f"💾 AssemblyAI transcript saved to: {json_path}")
 
         return json_path
+
+    def load_transcript_from_json(
+        self,
+        json_path: str
+    ) -> Tuple[VideoTranscriptAssemblyAI, List[VideoChunkAssemblyAI]]:
+        """
+        Load transcript and chunks from JSON file
+
+        Args:
+            json_path: Path to JSON file
+
+        Returns:
+            Tuple (VideoTranscriptAssemblyAI, List[VideoChunkAssemblyAI])
+        """
+        path = Path(json_path)
+        if not path.exists():
+            raise FileNotFoundError(f"JSON file not found: {json_path}")
+
+        # Load JSON
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        # Parse segments
+        segments = [
+            TranscriptSegment(
+                id=seg['id'],
+                start=seg['start'],
+                end=seg['end'],
+                text=seg['text']
+            )
+            for seg in data['transcript']['segments']
+        ]
+
+        # Parse chapters
+        chapters = [
+            Chapter(
+                chapter_id=ch['chapter_id'],
+                start=ch['start'],
+                end=ch['end'],
+                headline=ch['headline'],
+                summary=ch['summary'],
+                gist=ch['gist']
+            )
+            for ch in data.get('chapters', [])
+        ]
+
+        # Parse entities
+        entities = [
+            Entity(
+                entity_type=e['entity_type'],
+                text=e['text'],
+                start=e['start'],
+                end=e['end']
+            )
+            for e in data.get('entities', [])
+        ]
+
+        # Parse topics
+        topics = [
+            Topic(
+                topic=t['topic'],
+                relevance=t['relevance']
+            )
+            for t in data.get('topics', [])
+        ]
+
+        # Parse sentiment segments
+        sentiment_segments = [
+            SentimentSegment(
+                text=s['text'],
+                sentiment=s['sentiment'],
+                confidence=s['confidence'],
+                start=s['start'],
+                end=s['end'],
+                speaker=s.get('speaker')
+            )
+            for s in data.get('sentiment_segments', [])
+        ]
+
+        # Parse speakers
+        speakers = [
+            Speaker(
+                speaker=sp['speaker'],
+                start=sp['start'],
+                end=sp['end'],
+                text=sp['text'],
+                confidence=sp['confidence']
+            )
+            for sp in data.get('speakers', [])
+        ]
+
+        # Parse key phrases
+        key_phrases = [
+            KeyPhrase(
+                text=kp['text'],
+                rank=kp['rank'],
+                count=kp['count'],
+                timestamps=kp['timestamps']
+            )
+            for kp in data.get('key_phrases', [])
+        ]
+
+        # Calculate real duration from segments (fix for incorrect metadata)
+        real_duration = segments[-1].end if segments else data['metadata']['duration']
+
+        # Create VideoTranscriptAssemblyAI
+        transcript = VideoTranscriptAssemblyAI(
+            video_id=data['metadata']['video_id'],
+            title=data['metadata']['title'],
+            url=data['metadata']['url'],
+            duration=real_duration,  # Use real duration from last segment
+            language=data['metadata']['language'],
+            segments=segments,
+            chapters=chapters,
+            entities=entities,
+            topics=topics,
+            sentiment_segments=sentiment_segments,
+            speakers=speakers,
+            key_phrases=key_phrases,
+            audio_duration=real_duration,  # Use real duration
+            confidence=data['metadata'].get('confidence', 0.0),
+            words_count=data['metadata'].get('words_count', 0)
+        )
+
+        # Parse chunks (old format - will be recreated)
+        # We don't use old chunks, just return empty list
+        # User will call chunk_transcript() to create new chunks
+        chunks = []
+
+        print(f"📂 Transcript loaded from: {json_path}", flush=True)
+        print(f"   Segments: {len(segments)}", flush=True)
+        print(f"   Chapters: {len(chapters)}", flush=True)
+        print(f"   Entities: {len(entities)}", flush=True)
+        print(f"   Duration: {transcript.duration:.1f}s", flush=True)
+
+        return transcript, chunks
 
 
 __all__ = ['VideoProcessorAssemblyAI']
