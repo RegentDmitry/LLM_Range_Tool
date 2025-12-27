@@ -266,12 +266,16 @@ class VideoProcessorAssemblyAI:
                     timestamps=[self._convert_timestamp(t) for t in highlight.timestamps]
                 ))
 
+        # Calculate real duration from last word timestamp (in ms)
+        # Note: audio_duration from SDK is in seconds, but word timestamps are in ms
+        real_duration = merged_segments[-1].end if merged_segments else float(transcript.audio_duration)
+
         # Create VideoTranscriptAssemblyAI
         video_transcript = VideoTranscriptAssemblyAI(
             video_id=video_id,
             title=title,
             url=url,
-            duration=self._convert_timestamp(transcript.audio_duration),
+            duration=real_duration,
             language=language,
             segments=merged_segments,
             chapters=chapters,
@@ -280,7 +284,7 @@ class VideoProcessorAssemblyAI:
             sentiment_segments=sentiment_segments,
             speakers=speakers,
             key_phrases=key_phrases,
-            audio_duration=self._convert_timestamp(transcript.audio_duration),
+            audio_duration=real_duration,
             confidence=transcript.confidence,
             words_count=len(transcript.words) if transcript.words else 0
         )

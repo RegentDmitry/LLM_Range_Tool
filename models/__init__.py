@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 """
-Data models for PLO preflop RAG system and video RAG
+Data models for video RAG and GTO preflop systems
 """
 
+# GTO Preflop models
 from .preflop_models import (
     GameType,
     GameFormat,
@@ -19,6 +20,7 @@ from .preflop_models import (
     filter_trees_by_query,
 )
 
+# Video models (base)
 from .video_models import (
     TranscriptSegment,
     VideoTranscript,
@@ -27,6 +29,7 @@ from .video_models import (
     VideoMetadata,
 )
 
+# Video models (AssemblyAI)
 from .video_models_assemblyai import (
     Speaker,
     Chapter,
@@ -52,7 +55,7 @@ __all__ = [
     'TreeTag',
     'parse_tree_from_dynamodb',
     'filter_trees_by_query',
-    # Video models (Whisper)
+    # Video models (base)
     'TranscriptSegment',
     'VideoTranscript',
     'VideoChunk',

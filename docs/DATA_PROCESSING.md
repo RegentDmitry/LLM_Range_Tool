@@ -61,34 +61,94 @@ DB_CONFIG = {
 
 ## 1. Добавление новых видео
 
-### Шаг 1: Транскрипция через AssemblyAI
+### Вариант A: Batch Processing (рекомендуется для множества файлов)
+
+Для массовой обработки видео из папки используйте `batch_process_videos.py`:
 
 ```bash
-# Одно видео
+# Структура папки:
+# /path/to/videos/
+#   ├── Video Title 1.mp3
+#   ├── Video Title 1.txt   # метаданные
+#   ├── Video Title 2.mp3
+#   ├── Video Title 2.txt
+#   └── ...
+
+# Формат .txt файла метаданных:
+# author : AuthorName
+# url : https://example.com/lesson/...
+# category : postflop plo4
+
+# Dry run - показать что будет обработано
+python batch_process_videos.py --folder "/path/to/videos" --dry-run
+
+# Обработка с пропуском уже существующих
+python batch_process_videos.py --folder "/path/to/videos"
+
+# Обработка всех (даже существующих)
+python batch_process_videos.py --folder "/path/to/videos" --no-skip
+
+# Ограничить количество (для тестов)
+python batch_process_videos.py --folder "/path/to/videos" --limit 5
+```
+
+**Что делает batch_process_videos.py:**
+1. Сканирует папку на MP3 + TXT файлы
+2. Транскрибирует каждое видео через AssemblyAI
+3. Создаёт embeddings (батчами для скорости) и сохраняет в PostgreSQL
+4. Анализирует концепты через LLM:
+   - Находит известные концепты из taxonomy
+   - **Обнаруживает НОВЫЕ концепты** (автоматически добавляет в `poker_taxonomy.yaml`)
+5. Обновляет Neo4j граф (MENTIONS связи + новые концепты)
+
+**Особенности:**
+- Параллельная обработка embeddings (batch API)
+- Progress bar (tqdm) с текущим статусом
+- Автоматическое пополнение taxonomy новыми концептами
+- Graceful handling ошибок (продолжает при сбое одного видео)
+
+### Вариант B: Одно видео
+
+```bash
+# По URL
 python lib/video_processor_assemblyai.py --url "https://youtube.com/watch?v=..."
 
-# Или локальный файл
+# Локальный файл
 python lib/video_processor_assemblyai.py --file "video.mp4"
 ```
 
 ### Шаг 2: Проверка в PostgreSQL
 
 ```sql
--- Проверить добавленное видео
+-- Проверить добавленные видео
 SELECT id, title, category FROM videos ORDER BY id DESC LIMIT 5;
 
 -- Проверить chunks
 SELECT COUNT(*) FROM transcripts WHERE video_id = 'VIDEO_ID';
+
+-- Общая статистика
+SELECT COUNT(*) as videos FROM videos;
+SELECT COUNT(*) as chunks FROM transcripts;
 ```
 
-### Шаг 3: Добавление в Neo4j граф
+### Шаг 3: Добавление в Neo4j граф (только для Варианта B)
 
+При использовании `batch_process_videos.py` Neo4j обновляется автоматически.
+
+Для ручного добавления:
 ```bash
 # Полное переиндексирование (анализирует ВСЕ видео)
 python populate_graph.py
 
 # Или только BUILDS_ON связи
 python populate_graph.py --builds-on
+```
+
+### Шаг 4: Экспорт в Obsidian (опционально)
+
+```bash
+# Обновить Obsidian vault после добавления новых видео
+python obsidian_export.py --vault "C:/JN/obsidian/jnandez"
 ```
 
 ---
@@ -285,10 +345,13 @@ print(t.expand_query("RFI"))  # должен вернуть все алиасы
 
 | Файл | Назначение |
 |------|------------|
-| `lib/video_processor_assemblyai.py` | Транскрипция видео |
+| `batch_process_videos.py` | Массовая обработка видео из папки |
+| `lib/video_processor_assemblyai.py` | Транскрипция одного видео |
 | `lib/graph_db.py` | Neo4j операции |
 | `lib/taxonomy.py` | Загрузка и поиск по taxonomy |
 | `lib/conversational_rag.py` | RAG + Graph RAG |
 | `data/poker_taxonomy.yaml` | Покерные концепты |
 | `populate_graph.py` | Заполнение Neo4j из PostgreSQL |
 | `chat_with_videos.py` | Интерактивный чат |
+| `obsidian_export.py` | Экспорт Neo4j в Obsidian vault |
+| `obsidian_import.py` | Импорт изменений из Obsidian в Neo4j |
