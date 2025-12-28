@@ -214,6 +214,12 @@ class ConversationalVideoRAG:
             )
             title_patterns = [f"%{term}%" for term in expanded_terms]
 
+            # Build category match condition for PLO4/PLO5/preflop/postflop filtering
+            category_conditions = " OR ".join(
+                ["LOWER(v.category) LIKE LOWER(%s)"] * len(expanded_terms)
+            )
+            category_patterns = [f"%{term}%" for term in expanded_terms]
+
             # Note: <=> returns cosine distance [0,2], we convert to similarity [0,1]
             with ctx.deps.db_connection.cursor() as cur:
                 sql = f"""
@@ -223,15 +229,18 @@ class ConversationalVideoRAG:
                         v.url,
                         t.timestamp,
                         v.category,
-                        GREATEST(0, LEAST(1, 1 - (t.embedding <=> %s::vector))) +
-                        CASE WHEN {title_conditions} THEN 0.3 ELSE 0 END as similarity
+                        LEAST(1.0,
+                            GREATEST(0, LEAST(1, 1 - (t.embedding <=> %s::vector))) +
+                            CASE WHEN {title_conditions} THEN 0.3 ELSE 0 END +
+                            CASE WHEN {category_conditions} THEN 0.4 ELSE 0 END
+                        ) as similarity
                     FROM transcripts t
                     JOIN videos v ON t.video_id = v.id
                     WHERE t.embedding IS NOT NULL
                     ORDER BY similarity DESC
                     LIMIT %s
                 """
-                params = [query_embedding] + title_patterns + [top_k]
+                params = [query_embedding] + title_patterns + category_patterns + [top_k]
                 cur.execute(sql, params)
 
                 results = cur.fetchall()
@@ -269,6 +278,70 @@ class ConversationalVideoRAG:
                 f"{msg.role}: {msg.content}"
                 for msg in recent
             ])
+
+        @agent.tool
+        async def list_videos_by_category(
+            ctx: RunContext[RAGDependencies],
+            game_type: str = "",
+            stage: str = ""
+        ) -> str:
+            """
+            List videos filtered by category. Use this when user asks:
+            - "what videos about PLO5?" or "PLO4 videos"
+            - "preflop videos" or "postflop videos"
+            - "PLO5 preflop videos" (combine both filters)
+
+            Args:
+                game_type: "plo4" or "plo5" (leave empty for both)
+                stage: "preflop" or "postflop" (leave empty for both)
+
+            Returns:
+                List of videos matching the category filter
+            """
+            with ctx.deps.db_connection.cursor() as cur:
+                conditions = []
+                params = []
+
+                if game_type:
+                    conditions.append("LOWER(category) LIKE %s")
+                    params.append(f"%{game_type.lower()}%")
+
+                if stage:
+                    conditions.append("LOWER(category) LIKE %s")
+                    params.append(f"%{stage.lower()}%")
+
+                where_clause = " AND ".join(conditions) if conditions else "1=1"
+
+                cur.execute(f"""
+                    SELECT title, category, url
+                    FROM videos
+                    WHERE {where_clause}
+                    ORDER BY category, title
+                """, params)
+
+                results = cur.fetchall()
+
+            if not results:
+                return f"No videos found for game_type='{game_type}', stage='{stage}'"
+
+            # Group by category
+            by_category = {}
+            for title, category, url in results:
+                if category not in by_category:
+                    by_category[category] = []
+                by_category[category].append((title, url))
+
+            # Format output
+            output = [f"Found {len(results)} videos:"]
+            for category, videos in sorted(by_category.items()):
+                output.append(f"\n{category.upper()} ({len(videos)} videos):")
+                for title, url in videos[:10]:  # Limit to 10 per category
+                    output.append(f"  • {title}")
+                    output.append(f"    {url}")
+                if len(videos) > 10:
+                    output.append(f"  ... and {len(videos) - 10} more")
+
+            return "\n".join(output)
 
         # ====================================================================
         # Graph-based tools (Neo4j)
@@ -469,7 +542,8 @@ If already English, return the same text. Keep poker terminology accurate."""
 
 Your capabilities:
 1. Search poker educational videos using the search_videos tool
-2. Remember conversation context using get_conversation_context tool{graph_section}
+2. List videos by category using list_videos_by_category tool (for "what PLO5 videos?", "preflop videos", etc.)
+3. Remember conversation context using get_conversation_context tool{graph_section}
 
 CRITICAL RULES:
 - Base your answer ONLY on video transcripts - don't add external knowledge
@@ -481,6 +555,7 @@ Guidelines:
 - Always search videos before answering poker questions
 - Use poker terminology accurately
 - Videos cover both PLO4 (4-card) and PLO5 (5-card) Omaha
+- When user asks "what PLO5 videos?", "preflop videos", "list videos about X category" - use list_videos_by_category
 - When user asks "what to learn before X" or "prerequisites", use find_learning_path
 - When user asks "similar videos" or "what else to watch", use find_related_videos
 - When user asks about multiple topics together, use find_videos_by_concepts
