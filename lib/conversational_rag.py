@@ -488,9 +488,15 @@ Guidelines:
 Response format:
 - Give a SHORT summary (2-3 sentences) of what the videos cover on this topic
 - Example: "Found 3 videos about RFI strategy. They cover optimal raise sizing, position-based ranges, and practice methods."
-- Do NOT quote transcripts - the sources section will show the details
+- Do NOT quote transcripts in your answer text - quotes go in the sources
 - Let the user explore the video links for full content
-- Set confidence based on how relevant the found videos are"""
+- Set confidence based on how relevant the found videos are
+
+Source formatting:
+- For EACH source, write a 1-2 sentence summary in the 'text' field explaining what THIS video teaches about the user's question
+- Focus on the key insight or technique from this specific video
+- Example: "Explains how to use blockers to find profitable bluff spots on the river, with specific examples of hands that work well as bluffs."
+- Make each summary unique and specific to that video's content"""
 
     async def chat(self, question: str) -> SearchResult:
         """

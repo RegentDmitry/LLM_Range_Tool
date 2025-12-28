@@ -11,6 +11,7 @@ warnings.filterwarnings("ignore", message=".*logfire.*")
 
 import os
 import asyncio
+import textwrap
 from dotenv import load_dotenv
 from lib.conversational_rag import ConversationalVideoRAG, SearchResult
 
@@ -47,6 +48,9 @@ def print_sources(result: SearchResult):
         print(f"      📊 Relevance: {source.relevance:.0%}")
         if source.url:
             print(f"      🔗 {source.url}")
+        if source.text:
+            wrapped = textwrap.fill(source.text, width=85, initial_indent="      💬 \"", subsequent_indent="          ")
+            print(f"{wrapped}\"")
 
 
 async def chat_loop(rag: ConversationalVideoRAG):
@@ -98,7 +102,8 @@ async def chat_loop(rag: ConversationalVideoRAG):
 
             # Print answer
             print(f"\n🤖 Assistant:")
-            print(f"{result.answer}")
+            wrapped_answer = textwrap.fill(result.answer, width=85, initial_indent="", subsequent_indent="")
+            print(wrapped_answer)
             print(f"\n📊 Confidence: {result.confidence:.0%}")
 
             # Print sources
