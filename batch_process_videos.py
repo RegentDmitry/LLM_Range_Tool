@@ -6,20 +6,21 @@ Batch process new videos from a folder.
 
 Workflow:
 1. Scan folder for MP3 files + metadata TXT files
-2. Transcribe each video with AssemblyAI
+2. Transcribe each video with AssemblyAI (parallel)
 3. Create embeddings and save to PostgreSQL
 4. Update Neo4j knowledge graph
 
 Usage:
     python batch_process_videos.py --folder "/mnt/c/JN/video/postflop plo4"
     python batch_process_videos.py --folder "/mnt/c/JN/video/postflop plo4" --dry-run
-    python batch_process_videos.py --folder "/mnt/c/JN/video/postflop plo4" --skip-existing
+    python batch_process_videos.py --folder "/mnt/c/JN/video/postflop plo4" --parallel 4
 """
 
 import os
 import argparse
 import hashlib
 import json
+import threading
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime
@@ -36,13 +37,15 @@ from lib.taxonomy import PokerTaxonomy
 
 load_dotenv()
 
+# Thread-safe lock for taxonomy updates
+taxonomy_lock = threading.Lock()
+
 
 # Database config
 def get_db_config():
     """Get database config with Windows host detection for WSL"""
     host = os.getenv("POSTGRES_HOST")
     if not host:
-        # Try to detect Windows host from WSL
         try:
             with open('/proc/net/route', 'r') as f:
                 for line in f:
@@ -89,10 +92,8 @@ def get_existing_video_ids(conn) -> set:
 
 
 def create_embeddings_batch(texts: List[str], openai_client: OpenAI, batch_size: int = 100) -> List[List[float]]:
-    """Create embeddings for multiple texts in batches (parallel API calls)"""
+    """Create embeddings for multiple texts in batches"""
     all_embeddings = []
-
-    # Process in batches
     for i in range(0, len(texts), batch_size):
         batch = texts[i:i + batch_size]
         response = openai_client.embeddings.create(
@@ -100,7 +101,6 @@ def create_embeddings_batch(texts: List[str], openai_client: OpenAI, batch_size:
             input=batch
         )
         all_embeddings.extend([e.embedding for e in response.data])
-
     return all_embeddings
 
 
@@ -114,37 +114,39 @@ def save_video_to_db(
     openai_client: OpenAI
 ):
     """Save video and chunks to PostgreSQL with batch embeddings"""
-    with conn.cursor() as cur:
-        # Insert video
-        cur.execute("""
-            INSERT INTO videos (id, title, url, category)
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (id) DO UPDATE SET
-                title = EXCLUDED.title,
-                url = EXCLUDED.url,
-                category = EXCLUDED.category
-        """, (video_id, title, url, category))
-
-        # Create embeddings in batch (much faster than one-by-one)
-        texts = [chunk.text for chunk in chunks]
-        embeddings = create_embeddings_batch(texts, openai_client)
-
-        # Insert chunks with embeddings
-        for idx, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+    try:
+        with conn.cursor() as cur:
             cur.execute("""
-                INSERT INTO transcripts (video_id, chunk_index, text, start_time, end_time, timestamp, embedding)
-                VALUES (%s, %s, %s, %s, %s, %s, %s::vector)
-            """, (
-                video_id,
-                idx,
-                chunk.text,
-                chunk.start_time,
-                chunk.end_time,
-                chunk.timestamp,
-                embedding
-            ))
+                INSERT INTO videos (id, title, url, category)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (id) DO UPDATE SET
+                    title = EXCLUDED.title,
+                    url = EXCLUDED.url,
+                    category = EXCLUDED.category
+            """, (video_id, title, url, category))
 
-        conn.commit()
+            if chunks:
+                texts = [chunk.text for chunk in chunks]
+                embeddings = create_embeddings_batch(texts, openai_client)
+
+                for idx, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+                    cur.execute("""
+                        INSERT INTO transcripts (video_id, chunk_index, text, start_time, end_time, timestamp, embedding)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s::vector)
+                    """, (
+                        video_id,
+                        idx,
+                        chunk.text,
+                        chunk.start_time,
+                        chunk.end_time,
+                        chunk.timestamp,
+                        embedding
+                    ))
+
+            conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 
 def extract_concepts_for_video(
@@ -153,14 +155,7 @@ def extract_concepts_for_video(
     concept_names: List[str],
     openai_client: OpenAI
 ) -> Tuple[List[Dict], List[Dict]]:
-    """Use LLM to extract concepts from video.
-
-    Returns:
-        Tuple of (known_concepts, new_concepts)
-        - known_concepts: [{name, weight}, ...] - concepts from taxonomy
-        - new_concepts: [{name, aliases, category, related}, ...] - NEW concepts to add
-    """
-    # Combine chunk texts (limit to ~12000 chars)
+    """Use LLM to extract concepts from video."""
     full_text = " ".join([c.text for c in chunks])
     if len(full_text) > 12000:
         full_text = full_text[:12000] + "..."
@@ -203,13 +198,13 @@ Return JSON:
   ]
 }}
 
-Only include concepts actually discussed. For new_concepts, only add truly distinct poker concepts, not just video-specific terms."""
+Only include concepts actually discussed. For new_concepts, only add truly distinct poker concepts."""
 
     try:
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "You are a poker concept analyzer. Return only valid JSON. Be conservative about adding new concepts - only add if they represent distinct poker strategy concepts."},
+                {"role": "system", "content": "You are a poker concept analyzer. Return only valid JSON."},
                 {"role": "user", "content": prompt}
             ],
             response_format={"type": "json_object"},
@@ -221,35 +216,31 @@ Only include concepts actually discussed. For new_concepts, only add truly disti
             result.get("new_concepts", [])
         )
     except Exception as e:
-        print(f"    Warning: LLM concept extraction failed: {e}")
         return [], []
 
 
 def add_concept_to_taxonomy(concept: Dict, taxonomy_path: str = "data/poker_taxonomy.yaml"):
-    """Add a new concept to poker_taxonomy.yaml"""
+    """Add a new concept to poker_taxonomy.yaml (thread-safe)"""
     import yaml
 
-    with open(taxonomy_path, 'r', encoding='utf-8') as f:
-        taxonomy = yaml.safe_load(f)
+    with taxonomy_lock:
+        with open(taxonomy_path, 'r', encoding='utf-8') as f:
+            taxonomy = yaml.safe_load(f)
 
-    # Generate key from name (lowercase, underscores)
-    key = concept["name"].lower().replace(" ", "_").replace("-", "_")
+        key = concept["name"].lower().replace(" ", "_").replace("-", "_")
 
-    # Check if already exists
-    if key in taxonomy.get("concepts", {}):
-        return False
+        if key in taxonomy.get("concepts", {}):
+            return False
 
-    # Add new concept
-    taxonomy["concepts"][key] = {
-        "name": concept["name"],
-        "aliases": concept.get("aliases", []),
-        "related": concept.get("related", []),
-        "category": concept.get("category", "strategy")
-    }
+        taxonomy["concepts"][key] = {
+            "name": concept["name"],
+            "aliases": concept.get("aliases", []),
+            "related": concept.get("related", []),
+            "category": concept.get("category", "strategy")
+        }
 
-    # Save back
-    with open(taxonomy_path, 'w', encoding='utf-8') as f:
-        yaml.dump(taxonomy, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+        with open(taxonomy_path, 'w', encoding='utf-8') as f:
+            yaml.dump(taxonomy, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
     return True
 
@@ -259,22 +250,19 @@ def sync_concept_to_neo4j(concept: Dict, graph_db):
     from lib.graph_db import ConceptNode
 
     try:
-        # Create concept node
         graph_db.create_concept(ConceptNode(
             name=concept["name"],
             category=concept.get("category", "strategy")
         ))
 
-        # Create RELATES_TO relationships
         for related in concept.get("related", []):
             try:
                 graph_db.concept_relates_to(concept["name"], related)
             except:
-                pass  # Related concept might not exist
+                pass
 
         return True
     except Exception as e:
-        print(f"      Warning: Failed to sync concept to Neo4j: {e}")
         return False
 
 
@@ -287,10 +275,7 @@ def scan_folder(folder_path: str) -> List[Dict]:
         txt_path = mp3_path.with_suffix(".txt")
         metadata = parse_metadata_file(txt_path)
 
-        # Extract title from filename (remove .mp3)
         title = mp3_path.stem
-
-        # Clean up title (remove "PLO Mastermind" suffix if present)
         if title.endswith(" PLO Mastermind"):
             title = title[:-15].strip()
         elif title.endswith(" PLO Mas"):
@@ -307,13 +292,118 @@ def scan_folder(folder_path: str) -> List[Dict]:
     return videos
 
 
+def process_single_video(
+    video: Dict,
+    db_config: Dict,
+    concept_names: List[str],
+    use_graph: bool = True
+) -> Tuple[str, int, bool, List[Dict]]:
+    """
+    Process a single video (for parallel execution).
+    Each call creates its own connections.
+
+    Returns: (video_id, concept_count, success, new_concepts)
+    """
+    title = video["title"]
+    url = video["url"]
+    video_id = generate_video_id(title, url)
+
+    # Create per-thread connections
+    conn = psycopg2.connect(**db_config)
+    openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    processor = VideoProcessorAssemblyAI()
+
+    graph_db = None
+    if use_graph:
+        try:
+            graph_db = PokerGraphDB()
+            if not graph_db.verify_connection():
+                graph_db = None
+        except:
+            graph_db = None
+
+    try:
+        # 1. Transcribe
+        transcript, chunks = processor.process_video(
+            video_path=video["mp3_path"],
+            video_id=video_id,
+            title=title,
+            url=url,
+            chunk_duration=60.0,
+            overlap=10.0,
+            use_chapters=False
+        )
+
+        # 2. Save to PostgreSQL
+        save_video_to_db(
+            conn=conn,
+            video_id=video_id,
+            title=title,
+            url=url,
+            category=video["category"],
+            chunks=chunks,
+            openai_client=openai_client
+        )
+
+        # 3. Extract concepts
+        known_concepts, new_concepts = extract_concepts_for_video(
+            title=title,
+            chunks=chunks,
+            concept_names=concept_names,
+            openai_client=openai_client
+        )
+
+        # 4. Handle NEW concepts
+        for nc in new_concepts:
+            if add_concept_to_taxonomy(nc):
+                if graph_db:
+                    sync_concept_to_neo4j(nc, graph_db)
+
+        # 5. Update Neo4j
+        if graph_db:
+            graph_db.create_video(VideoNode(
+                id=video_id,
+                title=title,
+                url=url,
+                category=video["category"]
+            ))
+
+            for c in known_concepts:
+                if c["name"] in concept_names:
+                    try:
+                        graph_db.video_mentions_concept(video_id, c["name"], c["weight"])
+                    except:
+                        pass
+
+            for nc in new_concepts:
+                try:
+                    graph_db.video_mentions_concept(video_id, nc["name"], 0.7)
+                except:
+                    pass
+
+        return (video_id, len(known_concepts) + len(new_concepts), True, new_concepts)
+
+    except Exception as e:
+        try:
+            conn.rollback()
+        except:
+            pass
+        return (video_id, 0, False, [])
+
+    finally:
+        conn.close()
+        if graph_db:
+            graph_db.close()
+
+
 def batch_process(
     folder_path: str,
     dry_run: bool = False,
     skip_existing: bool = True,
-    limit: int = 0
+    limit: int = 0,
+    parallel: int = 1
 ):
-    """Main batch processing function"""
+    """Main batch processing function with parallel support"""
 
     print("=" * 60)
     print("Batch Video Processor")
@@ -321,6 +411,7 @@ def batch_process(
     print(f"Folder: {folder_path}")
     print(f"Dry run: {dry_run}")
     print(f"Skip existing: {skip_existing}")
+    print(f"Parallel workers: {parallel}")
     print()
 
     # Scan folder
@@ -338,32 +429,25 @@ def batch_process(
         for i, v in enumerate(videos[:20], 1):
             print(f"  {i}. {v['title']}")
             print(f"     URL: {v['url']}")
-            print(f"     Category: {v['category']}")
         if len(videos) > 20:
             print(f"  ... and {len(videos) - 20} more")
         return
 
-    # Initialize services
+    # Initialize services (for checking existing)
     print("Initializing services...")
 
     db_config = get_db_config()
     conn = psycopg2.connect(**db_config)
     print(f"  PostgreSQL: connected ({db_config['host']})")
 
-    openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    print("  OpenAI: connected")
-
-    processor = VideoProcessorAssemblyAI()
-    print("  AssemblyAI: connected")
-
-    graph_db = None
+    # Check Neo4j availability
+    use_graph = False
     try:
         graph_db = PokerGraphDB()
         if graph_db.verify_connection():
             print("  Neo4j: connected")
-        else:
-            graph_db = None
-            print("  Neo4j: not available (will skip graph updates)")
+            use_graph = True
+        graph_db.close()
     except:
         print("  Neo4j: not available (will skip graph updates)")
 
@@ -375,108 +459,166 @@ def batch_process(
     # Get existing videos
     existing_ids = get_existing_video_ids(conn) if skip_existing else set()
     print(f"Existing videos in DB: {len(existing_ids)}")
+    conn.close()
+
+    # Filter videos to process
+    videos_to_process = []
+    skipped = 0
+    for video in videos:
+        video_id = generate_video_id(video["title"], video["url"])
+        if skip_existing and video_id in existing_ids:
+            skipped += 1
+        else:
+            videos_to_process.append(video)
+
+    print(f"Videos to process: {len(videos_to_process)}")
+    print(f"Already skipped: {skipped}")
     print()
+
+    if not videos_to_process:
+        print("All videos already processed!")
+        return
+
+    # Apply limit
+    if limit > 0:
+        videos_to_process = videos_to_process[:limit]
+        print(f"Limited to: {len(videos_to_process)} videos")
+        print()
 
     # Process videos
     processed = 0
-    skipped = 0
     failed = 0
     new_concepts_added = 0
 
-    # Apply limit if specified
-    if limit > 0:
-        videos = videos[:limit]
+    if parallel > 1:
+        # PARALLEL processing
+        print(f"Processing with {parallel} parallel workers...")
+        print()
 
-    # Main progress bar
-    pbar = tqdm(videos, desc="Processing videos", unit="video")
+        with ThreadPoolExecutor(max_workers=parallel) as executor:
+            futures = {
+                executor.submit(
+                    process_single_video,
+                    video,
+                    db_config,
+                    concept_names,
+                    use_graph
+                ): video for video in videos_to_process
+            }
 
-    for video in pbar:
-        title = video["title"]
-        url = video["url"]
-        video_id = generate_video_id(title, url)
+            pbar = tqdm(as_completed(futures), total=len(videos_to_process), desc="Processing", unit="video")
+            for future in pbar:
+                video = futures[future]
+                try:
+                    video_id, concept_count, success, new_concepts = future.result()
+                    if success:
+                        processed += 1
+                        for nc in new_concepts:
+                            tqdm.write(f"  + NEW CONCEPT: {nc['name']}")
+                            new_concepts_added += 1
+                        pbar.set_postfix(done=processed, failed=failed)
+                    else:
+                        failed += 1
+                        tqdm.write(f"  ✗ Failed: {video['title'][:40]}")
+                except Exception as e:
+                    failed += 1
+                    tqdm.write(f"  ✗ Error [{video['title'][:30]}]: {e}")
 
-        pbar.set_description(f"Processing: {title[:40]}...")
+    else:
+        # SEQUENTIAL processing
+        conn = psycopg2.connect(**db_config)
+        openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        processor = VideoProcessorAssemblyAI()
 
-        # Skip if exists
-        if skip_existing and video_id in existing_ids:
-            pbar.set_postfix(status="skipped")
-            skipped += 1
-            continue
+        graph_db = None
+        if use_graph:
+            try:
+                graph_db = PokerGraphDB()
+                if not graph_db.verify_connection():
+                    graph_db = None
+            except:
+                pass
 
-        try:
-            # 1. Transcribe
-            pbar.set_postfix(step="transcribing")
-            transcript, chunks = processor.process_video(
-                video_path=video["mp3_path"],
-                video_id=video_id,
-                title=title,
-                url=url,
-                chunk_duration=60.0,
-                overlap=10.0,
-                use_chapters=False
-            )
+        pbar = tqdm(videos_to_process, desc="Processing videos", unit="video")
 
-            # 2. Save to PostgreSQL (with batch embeddings)
-            pbar.set_postfix(step=f"embeddings ({len(chunks)} chunks)")
-            save_video_to_db(
-                conn=conn,
-                video_id=video_id,
-                title=title,
-                url=url,
-                category=video["category"],
-                chunks=chunks,
-                openai_client=openai_client
-            )
+        for video in pbar:
+            title = video["title"]
+            url = video["url"]
+            video_id = generate_video_id(title, url)
 
-            # 3. Extract concepts (known + new)
-            pbar.set_postfix(step="analyzing concepts")
-            known_concepts, new_concepts = extract_concepts_for_video(
-                title=title,
-                chunks=chunks,
-                concept_names=concept_names,
-                openai_client=openai_client
-            )
+            pbar.set_description(f"Processing: {title[:40]}...")
 
-            # 4. Handle NEW concepts (add to taxonomy + Neo4j)
-            if new_concepts:
-                for nc in new_concepts:
-                    if add_concept_to_taxonomy(nc):
-                        tqdm.write(f"  + NEW CONCEPT: {nc['name']}")
-                        new_concepts_added += 1
-                        concept_names.append(nc["name"])  # Update local list
-                        if graph_db:
-                            sync_concept_to_neo4j(nc, graph_db)
-
-            # 5. Update Neo4j with video + MENTIONS
-            if graph_db:
-                pbar.set_postfix(step="updating graph")
-
-                # Create video node
-                graph_db.create_video(VideoNode(
-                    id=video_id,
+            try:
+                pbar.set_postfix(step="transcribing")
+                transcript, chunks = processor.process_video(
+                    video_path=video["mp3_path"],
+                    video_id=video_id,
                     title=title,
                     url=url,
-                    category=video["category"]
-                ))
+                    chunk_duration=60.0,
+                    overlap=10.0,
+                    use_chapters=False
+                )
 
-                # Link known concepts
-                for c in known_concepts:
-                    if c["name"] in concept_names:
-                        graph_db.video_mentions_concept(video_id, c["name"], c["weight"])
+                pbar.set_postfix(step=f"embeddings ({len(chunks)} chunks)")
+                save_video_to_db(
+                    conn=conn,
+                    video_id=video_id,
+                    title=title,
+                    url=url,
+                    category=video["category"],
+                    chunks=chunks,
+                    openai_client=openai_client
+                )
 
-                # Link new concepts
-                for nc in new_concepts:
-                    graph_db.video_mentions_concept(video_id, nc["name"], 0.7)
+                pbar.set_postfix(step="analyzing concepts")
+                known_concepts, new_concepts = extract_concepts_for_video(
+                    title=title,
+                    chunks=chunks,
+                    concept_names=concept_names,
+                    openai_client=openai_client
+                )
 
-            processed += 1
-            pbar.set_postfix(status="done", concepts=len(known_concepts) + len(new_concepts))
+                if new_concepts:
+                    for nc in new_concepts:
+                        if add_concept_to_taxonomy(nc):
+                            tqdm.write(f"  + NEW CONCEPT: {nc['name']}")
+                            new_concepts_added += 1
+                            concept_names.append(nc["name"])
+                            if graph_db:
+                                sync_concept_to_neo4j(nc, graph_db)
 
-        except Exception as e:
-            tqdm.write(f"  ✗ Error [{title[:30]}]: {e}")
-            failed += 1
-            continue
+                if graph_db:
+                    pbar.set_postfix(step="updating graph")
+                    graph_db.create_video(VideoNode(
+                        id=video_id,
+                        title=title,
+                        url=url,
+                        category=video["category"]
+                    ))
 
-    pbar.close()
+                    for c in known_concepts:
+                        if c["name"] in concept_names:
+                            graph_db.video_mentions_concept(video_id, c["name"], c["weight"])
+
+                    for nc in new_concepts:
+                        graph_db.video_mentions_concept(video_id, nc["name"], 0.7)
+
+                processed += 1
+                pbar.set_postfix(status="done", concepts=len(known_concepts) + len(new_concepts))
+
+            except Exception as e:
+                tqdm.write(f"  ✗ Error [{title[:30]}]: {e}")
+                try:
+                    conn.rollback()
+                except:
+                    pass
+                failed += 1
+
+        pbar.close()
+        conn.close()
+        if graph_db:
+            graph_db.close()
 
     # Summary
     print("\n" + "=" * 60)
@@ -489,21 +631,28 @@ def batch_process(
     print()
 
     # Final stats
-    with conn.cursor() as cur:
-        cur.execute("SELECT COUNT(*) FROM videos")
-        total_videos = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(*) FROM transcripts")
-        total_chunks = cur.fetchone()[0]
+    try:
+        conn = psycopg2.connect(**db_config)
+        with conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) FROM videos")
+            total_videos = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) FROM transcripts")
+            total_chunks = cur.fetchone()[0]
+        conn.close()
 
-    print(f"Total videos in DB: {total_videos}")
-    print(f"Total chunks in DB: {total_chunks}")
+        print(f"Total videos in DB: {total_videos}")
+        print(f"Total chunks in DB: {total_chunks}")
+    except Exception as e:
+        print(f"Could not get final stats: {e}")
 
-    if graph_db:
-        stats = graph_db.get_stats()
-        print(f"Neo4j - Videos: {stats['videos']}, Mentions: {stats['mentions']}")
-        graph_db.close()
-
-    conn.close()
+    if use_graph:
+        try:
+            graph_db = PokerGraphDB()
+            stats = graph_db.get_stats()
+            print(f"Neo4j - Videos: {stats['videos']}, Mentions: {stats['mentions']}")
+            graph_db.close()
+        except:
+            pass
 
 
 if __name__ == "__main__":
@@ -514,6 +663,8 @@ if __name__ == "__main__":
                        help="Skip videos already in database (default: True)")
     parser.add_argument("--no-skip", action="store_true", help="Process all videos even if exist")
     parser.add_argument("--limit", type=int, default=0, help="Limit number of videos to process")
+    parser.add_argument("--parallel", type=int, default=1,
+                       help="Number of parallel workers (default: 1)")
 
     args = parser.parse_args()
 
@@ -523,5 +674,6 @@ if __name__ == "__main__":
         folder_path=args.folder,
         dry_run=args.dry_run,
         skip_existing=skip_existing,
-        limit=args.limit
+        limit=args.limit,
+        parallel=args.parallel
     )

@@ -988,3 +988,2606 @@ concepts:
     - Continuation Bet
     - Out of Position
     category: postflop_action
+  paired_board_strategy:
+    name: Paired Board Strategy
+    aliases:
+    - paired flop strategy
+    - стратегия парных флопов
+    related:
+    - 3-Bet
+    - Out of Position
+    - Continuation Bet
+    category: strategy
+  200_big_blind_strategy:
+    name: 200 Big Blind Strategy
+    aliases:
+    - 200bb strategy
+    - стратегия 200бб
+    related:
+    - Stack to Pot Ratio
+    - Equity Realization
+    category: strategy
+  aggression_factor_in_3_bet_pots:
+    name: Aggression Factor in 3-Bet Pots
+    aliases:
+    - Aggression Factor
+    - Aggression Rate
+    related:
+    - 3-Bet Pot
+    - Check-Raise
+    category: strategy
+  small_sizing_strategy:
+    name: Small Sizing Strategy
+    aliases:
+    - Small Bet Sizing
+    - Малый размер ставки
+    related:
+    - Continuation Bet
+    - GTO
+    category: betting
+  polarity_advantage:
+    name: Polarity Advantage
+    aliases:
+    - Polarity in Betting
+    - Полярность в ставках
+    related:
+    - Continuation Bet
+    - GTO
+    - Exploitative
+    category: strategy
+  capped_range:
+    name: Capped Range
+    aliases:
+    - Limited Range
+    - Ограниченный диапазон
+    related:
+    - Range Advantage
+    - Facing a 3-Bet
+    category: strategy
+  stabbing:
+    name: Stabbing
+    aliases:
+    - Small Bet
+    - Ставка
+    related:
+    - Continuation Bet
+    - In Position
+    - Out of Position
+    category: betting
+  ev_categories:
+    name: EV Categories
+    aliases:
+    - Expected Value Categories
+    - EV Classifications
+    related:
+    - Expected Value
+    - Frequencies
+    category: strategy
+  lowest_ev_bluffs:
+    name: Lowest EV Bluffs
+    aliases:
+    - Weakest Bluffs
+    - Low Equity Bluffs
+    related:
+    - Continuation Bet
+    - Expected Value
+    category: postflop_action
+  board_coverage:
+    name: Board Coverage
+    aliases:
+    - Coverage Strategy
+    - Board Texture Coverage
+    related:
+    - Continuation Bet
+    - Equity Realization
+    category: strategy
+  opponent's_folding_range:
+    name: Opponent's Folding Range
+    aliases:
+    - Folding Frequency Analysis
+    - Opponent Fold Dynamics
+    related:
+    - Continuation Bet
+    - Expected Value
+    category: opponent_modeling
+  over_c_betting:
+    name: Over C-Betting
+    aliases:
+    - Over Continuation Betting
+    - Overseas Betting
+    - Овер Си-Бет
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  range_betting:
+    name: Range Betting
+    aliases:
+    - Range-Based Betting
+    - Рендж Беттинг
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  aggressive_check_raising:
+    name: Aggressive Check-Raising
+    aliases:
+    - Aggressive Check Raise
+    - Агрессивный Чек-Рейз
+    related:
+    - Check-Raise
+    - Exploitative
+    category: postflop_action
+  mml_boards:
+    name: MML Boards
+    aliases:
+    - Medium Medium Low Boards
+    - Medium Low Low Boards
+    related:
+    - Check-Raise
+    - Exploitative
+    category: postflop_action
+  blocker_based_3_bets:
+    name: Blocker Based 3-Bets
+    aliases:
+    - Blocker 3-Bet
+    - Блокирующий 3-бет
+    related:
+    - 3-Bet
+    - Blockers
+    category: preflop_action
+  flop_strategy_on_ace_high_boards:
+    name: Flop Strategy on Ace High Boards
+    aliases:
+    - Ace High Flop Strategy
+    - Стратегия на флопе с высоким тузом
+    related:
+    - Continuation Bet
+    - In Position
+    category: postflop_action
+  checking_range_on_ace_high_boards:
+    name: Checking Range on Ace High Boards
+    aliases:
+    - Ace High Checking Range
+    - Чек-диапазон на флопе с высоким тузом
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  delayed_continuation_bet:
+    name: Delayed Continuation Bet
+    aliases:
+    - Delayed C-Bet
+    - Delay C-Betting
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  dynamic_turn_cards:
+    name: Dynamic Turn Cards
+    aliases:
+    - Dynamic Board
+    - Dynamic Turn
+    related:
+    - Wet Board
+    - Dry Board
+    category: postflop_action
+  player_type_exploits:
+    name: Player Type Exploits
+    aliases:
+    - Exploiting Player Types
+    related:
+    - Exploitative
+    category: opponent_modeling
+  shallow_stack_strategy:
+    name: Shallow Stack Strategy
+    aliases:
+    - Shallow Stack Play
+    - Shallow Stack Tactics
+    related:
+    - Stack to Pot Ratio
+    - Equity Realization
+    category: strategy
+  deep_stack_strategy:
+    name: Deep Stack Strategy
+    aliases:
+    - Deep Stack Play
+    - Deep Stack Tactics
+    related:
+    - Stack to Pot Ratio
+    - Equity Realization
+    category: strategy
+  polarized_c_betting:
+    name: Polarized C-Betting
+    aliases:
+    - Polarized Continuation Betting
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: betting
+  over_aggression_with_blockers:
+    name: Over Aggression with Blockers
+    aliases:
+    - Aggressive Blocker Play
+    - Blocker Overbetting
+    related:
+    - Blockers
+    - GTO
+    - Exploitative
+    category: postflop_action
+  understanding_opponent's_range:
+    name: Understanding Opponent's Range
+    aliases:
+    - Opponent Range Analysis
+    - Range Assessment
+    related:
+    - Range Advantage
+    - GTO
+    category: opponent_modeling
+  bluff_raising_flops:
+    name: Bluff Raising Flops
+    aliases:
+    - Bluff Raise
+    - Flop Bluff Raise
+    - блеф-рейз на флопе
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  4_bet_bluffing_ranges:
+    name: 4-Bet Bluffing Ranges
+    aliases:
+    - 4-Bet Bluffing
+    - Bluffing Ranges
+    related:
+    - 4-Bet
+    - Bluffing
+    category: strategy
+  connectivity_in_hands:
+    name: Connectivity in Hands
+    aliases:
+    - Hand Connectivity
+    - Connectivity
+    related:
+    - Rundowns
+    - Double Suited
+    category: hands
+  c_betting_frequency_adjustment:
+    name: C-Betting Frequency Adjustment
+    aliases:
+    - C-Betting Strategy Adjustment
+    - C-Betting Tuning
+    related:
+    - Continuation Bet
+    - Exploitative
+    - Frequencies
+    category: postflop_action
+  static_board_c_betting:
+    name: Static Board C-Betting
+    aliases:
+    - Static Board Strategy
+    - Static Board Play
+    related:
+    - Continuation Bet
+    - Out of Position
+    category: postflop_action
+  post_flop_adjustments_based_on_opponent's_c_bet_frequencies:
+    name: Post-Flop Adjustments Based on Opponent's C-Bet Frequencies
+    aliases:
+    - C-Bet Frequency Adjustment
+    - Adjusting to C-Bet Trends
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  exploiting_unprotected_checkback_ranges:
+    name: Exploiting Unprotected Checkback Ranges
+    aliases:
+    - Checkback Exploitation
+    - Exploiting Weak Checkbacks
+    related:
+    - Check-Raise
+    - Exploitative
+    category: postflop_action
+  timing_tells:
+    name: Timing Tells
+    aliases:
+    - Timing Reads
+    - Тайминг Телы
+    related:
+    - Exploitative
+    category: opponent_modeling
+  depolarized_betting:
+    name: Depolarized Betting
+    aliases:
+    - Depolarized Range Betting
+    - Деполяризованное Беттинг
+    related:
+    - Exploitative
+    category: betting
+  aggressive_raising_strategies:
+    name: Aggressive Raising Strategies
+    aliases:
+    - Aggressive Bluff Raising
+    - Агрессивные Рейзы
+    related:
+    - Exploitative
+    category: strategy
+  aggressive_defense:
+    name: Aggressive Defense
+    aliases:
+    - Defensive Aggression
+    - Aggressive Defense Strategy
+    related:
+    - GTO
+    - Check-Raise
+    category: strategy
+  roman_turtle_strategy:
+    name: Roman Turtle Strategy
+    aliases:
+    - Roman Turtle Formation
+    related:
+    - GTO
+    - Defending the BB
+    category: strategy
+  fighting_for_small_pots:
+    name: Fighting for Small Pots
+    aliases:
+    - Small Pot Strategy
+    - Борьба за маленькие банки
+    related:
+    - In Position
+    - Out of Position
+    - Defending the BB
+    category: strategy
+  aggressive_raising_in_3_bet_pots:
+    name: Aggressive Raising in 3-Bet Pots
+    aliases:
+    - Aggressive Play in 3-Bet Pots
+    - Aggressive Raising Strategy
+    related:
+    - 3-Bet Pot
+    - In Position
+    - Out of Position
+    - Continuation Bet
+    category: postflop_action
+  heuristic_for_raising_with_backdoor_equity:
+    name: Heuristic for Raising with Backdoor Equity
+    aliases:
+    - Backdoor Equity Raising Heuristic
+    - Backdoor Draw Strategy
+    related:
+    - GTO
+    - Equity Realization
+    category: strategy
+  small_bet_strategy:
+    name: Small Bet Strategy
+    aliases:
+    - Small Sizing Strategy
+    - Small Bet Approach
+    related:
+    - Continuation Bet
+    - GTO
+    category: betting
+  flush_draw_dynamics:
+    name: Flush Draw Dynamics
+    aliases:
+    - Flush Draw Strategy
+    - Flush Draw Considerations
+    related:
+    - Blockers
+    - Continuation Bet
+    category: postflop_action
+  c_bet_strategy_analysis:
+    name: C-Bet Strategy Analysis
+    aliases:
+    - C-Bet Tactics
+    - C-Bet Approach
+    related:
+    - Continuation Bet
+    - GTO
+    category: postflop_action
+  opponent_modeling:
+    name: Opponent Modeling
+    aliases:
+    - Opponent Analysis
+    - Моделирование противника
+    related:
+    - GTO
+    - Exploitative
+    category: opponent_modeling
+  lead_strategy_on_paired_boards:
+    name: Lead Strategy on Paired Boards
+    aliases:
+    - Leading on Paired Boards
+    - Paired Board Leading Strategy
+    - Стратегия ведения на парных досках
+    related:
+    - 3-Bet Pot
+    - In Position
+    - Out of Position
+    category: postflop_action
+  checking_frequency_adjustment:
+    name: Checking Frequency Adjustment
+    aliases:
+    - Adjusting Check Frequency
+    - Check Frequency Tuning
+    - Настройка частоты чеков
+    related:
+    - GTO
+    - Exploitative
+    category: postflop_action
+  board_classifications:
+    name: Board Classifications
+    aliases:
+    - Board Categories
+    - Board Types
+    related:
+    - C-Betting Frequencies
+    - Continuation Bet
+    category: strategy
+  slow_play_on_rainbow_boards:
+    name: Slow Play on Rainbow Boards
+    aliases:
+    - Slow Play Strategy
+    - Rainbow Slow Play
+    - Медленная игра на радужных досках
+    related:
+    - Check-Raise
+    - Continuation Bet
+    - Dynamic Board
+    category: postflop_action
+  polarized_check_raising_range:
+    name: Polarized Check-Raising Range
+    aliases:
+    - Polarized Range
+    - Polarized Check-Raise
+    - Поляризованный диапазон чек-рейза
+    related:
+    - Check-Raise
+    - Dynamic Board
+    category: opponent_modeling
+  stack_off_strategy:
+    name: Stack Off Strategy
+    aliases:
+    - Stack Off with Strong Hands
+    - Stacking Off
+    - Стекование с сильными руками
+    related:
+    - Check-Raise
+    - Equity Realization
+    category: strategy
+  stack_size_impact_on_c_betting:
+    name: Stack Size Impact on C-Betting
+    aliases:
+    - C-Bet by Stack Size
+    - C-Betting and Stack Size
+    - C-бет в зависимости от размера стека
+    related:
+    - Short Stack
+    - Stack to Pot Ratio
+    - Continuation Bet
+    category: strategy
+  delay_continuation_bet:
+    name: Delay Continuation Bet
+    aliases:
+    - Delay C-Bet
+    - Delayed Continuation Bet
+    related:
+    - Continuation Bet
+    - In Position
+    - Out of Position
+    category: postflop_action
+  raising_turn_vs_probe:
+    name: Raising Turn vs Probe
+    aliases:
+    - Raise vs Probe
+    - Raising Against Probe Bet
+    related:
+    - Probe Bet
+    - Check-Raise
+    category: postflop_action
+  river_stab:
+    name: River Stab
+    aliases:
+    - River Bluff
+    - River Bet
+    related:
+    - Bluff
+    - In Position
+    - Out of Position
+    category: postflop_action
+  capped_double_check_ranges:
+    name: Capped Double Check Ranges
+    aliases:
+    - Capped Ranges
+    - Double Check Ranges
+    related:
+    - Range Advantage
+    - Exploitative
+    category: opponent_modeling
+  low_paired_board_strategy:
+    name: Low Paired Board Strategy
+    aliases:
+    - Low Pair Board Play
+    - Стратегия на низких парных досках
+    related:
+    - Continuation Bet
+    - Range Advantage
+    - Nut Advantage
+    category: postflop_action
+  turn_double_barrel_frequency:
+    name: Turn Double Barrel Frequency
+    aliases:
+    - Turn Betting Frequency
+    - Частота ставок на терне
+    related:
+    - Continuation Bet
+    - Frequencies
+    category: postflop_action
+  polarization_in_betting:
+    name: Polarization in Betting
+    aliases:
+    - Polarized Betting
+    - Поляризация в ставках
+    related:
+    - Continuation Bet
+    - Equity Realization
+    category: strategy
+  medium_strong_hands:
+    name: Medium Strong Hands
+    aliases:
+    - Medium Strength Hands
+    - Средние сильные руки
+    related:
+    - Equity Realization
+    - Blockers
+    category: hands
+  one_street_bluff:
+    name: One Street Bluff
+    aliases:
+    - Single Street Bluff
+    - Блеф на одной улице
+    related:
+    - Continuation Bet
+    - Frequencies
+    category: betting
+  leading_in_4_bet_pots:
+    name: Leading in 4-Bet Pots
+    aliases:
+    - Leading Strategy
+    - 4-Bet Pot Leading
+    - Лидирование в 4-бет потах
+    related:
+    - 4-Bet
+    - Out of Position
+    - GTO
+    category: postflop_action
+  monotone_board_strategy:
+    name: Monotone Board Strategy
+    aliases:
+    - Monotone Strategy
+    - Monotone Flop Strategy
+    - Стратегия монотонных флопов
+    related:
+    - Monotone
+    - GTO
+    - Range Advantage
+    category: postflop_action
+  straight_board_strategy:
+    name: Straight Board Strategy
+    aliases:
+    - Straight Flop Strategy
+    - Strategy for Straight Boards
+    - Стратегия для стритовых флопов
+    related:
+    - GTO
+    - Range Advantage
+    category: postflop_action
+  leading_on_straight_flops:
+    name: Leading on Straight Flops
+    aliases:
+    - Leading from the Big Blind
+    - Straight Flop Leading
+    - Лидирование на прямых флопах
+    related:
+    - Donk Bet
+    - Defending the BB
+    - Single Raised Pot
+    category: postflop_action
+  leading_frequency:
+    name: Leading Frequency
+    aliases:
+    - leading range frequency
+    - частота ведения
+    related:
+    - Donk Bet
+    - Leading Range
+    category: postflop_action
+  donk_bet_exclusion_strategy:
+    name: Donk Bet Exclusion Strategy
+    aliases:
+    - Donk Bet Excluded Strategy
+    related:
+    - Donk Bet
+    - GTO
+    - In Position
+    - Out of Position
+    category: strategy
+  check_raise_bluff_frequency:
+    name: Check Raise Bluff Frequency
+    aliases:
+    - Check Raise Bluff Rate
+    - Частота Блефа Чек-Рейза
+    related:
+    - Check-Raise
+    - Exploitative
+    category: postflop_action
+  adjusting_c_bet_frequency_based_on_opponent's_strategy:
+    name: Adjusting C-Bet Frequency Based on Opponent's Strategy
+    aliases:
+    - C-Bet Adjustment Strategy
+    - Стратегия Корректировки C-Бета
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  structured_study_approach:
+    name: Structured Study Approach
+    aliases:
+    - Structured Learning
+    - Systematic Study
+    related:
+    - Exploitative
+    - GTO
+    category: strategy
+  lead_frequency:
+    name: Lead Frequency
+    aliases:
+    - Leading Strategy
+    - Leading Frequency
+    related:
+    - Continuation Bet
+    - Check-Raise
+    category: postflop_action
+  equity_graph:
+    name: Equity Graph
+    aliases:
+    - Equity Visualization
+    - Equity Analysis
+    related:
+    - Equity Realization
+    - Range Advantage
+    category: postflop_action
+  database_analysis_for_leak_finding:
+    name: Database Analysis for Leak Finding
+    aliases:
+    - Database Review
+    - Hand Review Process
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  hand_category_frequency_assessment:
+    name: Hand Category Frequency Assessment
+    aliases:
+    - Hand Frequency Analysis
+    - Hand Play Frequency
+    related:
+    - Continuation Bet
+    - Frequencies
+    category: postflop_action
+  reverse_transitions:
+    name: Reverse Transitions
+    aliases:
+    - Reverse Transitioning
+    - Обратные переходы
+    related:
+    - GTO
+    - Aggression
+    category: strategy
+  backdoor_flush_draw:
+    name: Backdoor Flush Draw
+    aliases:
+    - BDFD
+    - Задняя флеш-дро
+    related:
+    - Blockers
+    - Equity Realization
+    category: hands
+  turn_betting_strategy:
+    name: Turn Betting Strategy
+    aliases:
+    - Turn Bet Strategy
+    - Стратегия ставок на терне
+    related:
+    - Probe Bet
+    - Continuation Bet
+    - In Position
+    - Out of Position
+    category: postflop_action
+  merged_range_betting:
+    name: Merged Range Betting
+    aliases:
+    - Merged Range
+    - Смешанный диапазон ставок
+    related:
+    - Probe Bet
+    - Continuation Bet
+    - GTO
+    category: betting
+  thin_value_betting:
+    name: Thin Value Betting
+    aliases:
+    - Thin Value
+    - Тонкая ставка за ценность
+    related:
+    - GTO
+    - Range Advantage
+    category: betting
+  heuristic_analysis:
+    name: Heuristic Analysis
+    aliases:
+    - Heuristic Strategy
+    - Heuristic Approach
+    related: []
+    category: strategy
+  over_bluffing_for_small_sizing:
+    name: Over Bluffing for Small Sizing
+    aliases:
+    - Over Bluffing Small Bets
+    - Small Bet Over Bluffing
+    related:
+    - Bluff to Value Ratio
+    - Exploitative
+    category: postflop_action
+  over_bluffing_for_large_sizing:
+    name: Over Bluffing for Large Sizing
+    aliases:
+    - Over Bluffing Large Bets
+    - Large Bet Over Bluffing
+    related:
+    - Bluff to Value Ratio
+    - Exploitative
+    category: postflop_action
+  flop_c_betting_strategy:
+    name: Flop C-Betting Strategy
+    aliases:
+    - Flop C-Betting Approach
+    - Flop Bet Strategy
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  opponent_specific_adjustments:
+    name: Opponent-Specific Adjustments
+    aliases:
+    - Adjusting to Opponent's Range
+    - Opponent Modeling
+    related:
+    - Range Advantage
+    - Defending the BB
+    category: opponent_modeling
+  population_mistakes_in_oop_play:
+    name: Population Mistakes in OOP Play
+    aliases:
+    - Common Errors in Out of Position Play
+    - Ошибки населения в игре вне позиции
+    related:
+    - Out of Position
+    - Equity Realization
+    category: strategy
+  heuristic_betting_strategy:
+    name: Heuristic Betting Strategy
+    aliases:
+    - Rule of Thumb Betting
+    - Эвристическая стратегия ставок
+    related:
+    - Equity Realization
+    - Range Advantage
+    category: strategy
+  dunking:
+    name: Dunking
+    aliases:
+    - Dunk Bet
+    - Dunking Strategy
+    - Дункинг
+    related:
+    - Donk Bet
+    - Check-Raise
+    category: postflop_action
+  late_c_bet:
+    name: Late C-Bet
+    aliases:
+    - Late Continuation Bet
+    - Поздняя ставка продолжения
+    related:
+    - Continuation Bet
+    category: postflop_action
+  check_check_range:
+    name: Check-Check Range
+    aliases:
+    - Check-Check Strategy
+    - Стратегия чек-чек
+    related: []
+    category: opponent_modeling
+  post_flop_check_strategy:
+    name: Post-Flop Check Strategy
+    aliases:
+    - Check Strategy
+    - Post-Flop Check Play
+    - Стратегия проверки на постфлопе
+    related:
+    - Continuation Bet
+    - Check-Raise
+    - In Position
+    - Out of Position
+    category: postflop_action
+  solver_adoption:
+    name: Solver Adoption
+    aliases:
+    - Solver Strategies
+    - Solver Solutions
+    - Адаптация к солверам
+    related:
+    - GTO
+    - Frequencies
+    category: strategy
+  checkpot:
+    name: Checkpot
+    aliases:
+    - Checkpot
+    - Чекпот
+    related:
+    - Check-Raise
+    - Equity Realization
+    category: postflop_action
+  merged_betting:
+    name: Merged Betting
+    aliases:
+    - Merged Betting
+    - Смешанная ставка
+    related:
+    - Continuation Bet
+    - GTO
+    category: betting
+  stabbing_range:
+    name: Stabbing Range
+    aliases:
+    - stabbing range
+    - range for stabbing
+    - диапазон для тычка
+    related:
+    - Continuation Bet
+    - Check-Raise
+    category: postflop_action
+  blocker_type_hands:
+    name: Blocker Type Hands
+    aliases:
+    - blocker hands
+    - hands with blockers
+    - руки с блокировщиками
+    related:
+    - Blockers
+    - Check-Raise
+    category: opponent_modeling
+  mixed_strategy_betting:
+    name: Mixed Strategy Betting
+    aliases:
+    - mixed strategy
+    - смешанная стратегия
+    related:
+    - GTO
+    - Equity Realization
+    category: betting
+  boat_blockers:
+    name: Boat Blockers
+    aliases:
+    - boat blockers
+    - блокеры для фулл-хауса
+    related:
+    - Blockers
+    category: strategy
+  selective_c_betting:
+    name: Selective C-Betting
+    aliases:
+    - Selective Continuation Betting
+    - C-Betting Strategy
+    related:
+    - Continuation Bet
+    - Out of Position
+    - In Position
+    category: postflop_action
+  metagame_considerations:
+    name: Metagame Considerations
+    aliases:
+    - Metagame Strategy
+    - Meta Strategy
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  high_broadway_board_strategy:
+    name: High Broadway Board Strategy
+    aliases:
+    - Broadway Board Play
+    - High Card Board Strategy
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  small_blind_leading_frequency:
+    name: Small Blind Leading Frequency
+    aliases:
+    - SB Lead Frequency
+    - Частота Лидирования SB
+    related:
+    - Small Blind
+    - Exploitative
+    category: strategy
+  check_back_strong_hands:
+    name: Check Back Strong Hands
+    aliases:
+    - Check Back Strategy
+    - Чек Бэк Сильные Руки
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  golden_turn_rule:
+    name: Golden Turn Rule
+    aliases:
+    - Golden Turn Strategy
+    related:
+    - 3-Bet
+    - Out of Position
+    - Check-Raise
+    category: strategy
+  value_threshold_for_c_betting:
+    name: Value Threshold for C-Betting
+    aliases:
+    - C-Betting Value Threshold
+    - C-Bet Value Threshold
+    - порог ценности для C-бета
+    related:
+    - Continuation Bet
+    - Equity Realization
+    category: betting
+  strength_buckets:
+    name: Strength Buckets
+    aliases:
+    - Hand Strength Buckets
+    - Strength Categories
+    - категории силы рук
+    related:
+    - Equity Realization
+    - Range Advantage
+    category: strategy
+  turn_strategy_after_leading_flop:
+    name: Turn Strategy After Leading Flop
+    aliases:
+    - Turn Leading Strategy
+    - Turn Betting Strategy
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  blank_turn_cards:
+    name: Blank Turn Cards
+    aliases:
+    - Blank Turns
+    - Бланковые карты на терне
+    related:
+    - Range Advantage
+    - Nut Advantage
+    category: postflop_action
+  protecting_checking_range:
+    name: Protecting Checking Range
+    aliases:
+    - Checking Range Protection
+    - Защита диапазона чеков
+    related:
+    - Continuation Bet
+    - Frequencies
+    category: postflop_action
+  multi_street_strategy:
+    name: Multi-Street Strategy
+    aliases:
+    - Multi-Street Play
+    - Многоуровневая стратегия
+    related:
+    - GTO
+    - Expected Value
+    - Frequencies
+    category: strategy
+  preparation_for_later_streets:
+    name: Preparation for Later Streets
+    aliases:
+    - Pre-Street Preparation
+    - Подготовка к последующим улицам
+    related:
+    - GTO
+    - Expected Value
+    category: strategy
+  leading_range_on_paired_boards:
+    name: Leading Range on Paired Boards
+    aliases:
+    - Leading on Paired Boards
+    - Paired Board Leading
+    related:
+    - GTO
+    - Out of Position
+    - Continuation Bet
+    category: postflop_action
+  checking_range_strategy:
+    name: Checking Range Strategy
+    aliases:
+    - Range Checking
+    - Check Full Range
+    related:
+    - 3-Bet Pot
+    - Exploitative
+    - Equity Realization
+    category: postflop_action
+  aggression_imbalance:
+    name: Aggression Imbalance
+    aliases:
+    - Aggression Disparity
+    related:
+    - Exploitative
+    - Nut Advantage
+    category: opponent_modeling
+  check_raise_fold_strategy:
+    name: Check Raise Fold Strategy
+    aliases:
+    - Check Raise Fold
+    - Check-Raise-Fold Strategy
+    related:
+    - Check-Raise
+    - GTO
+    - Exploitative
+    category: postflop_action
+  population_deviation:
+    name: Population Deviation
+    aliases:
+    - Population Play Patterns
+    - Population Strategy
+    related:
+    - GTO
+    - Exploitative
+    category: opponent_modeling
+  under_bluffing:
+    name: Under Bluffing
+    aliases:
+    - Under Bluff
+    - Недостаточный блеф
+    related:
+    - Check-Raise
+    - Exploitative
+    category: opponent_modeling
+  over_folding:
+    name: Over-Folding
+    aliases:
+    - Excessive Folding
+    - Чрезмерный фолд
+    related:
+    - Check-Raise
+    - Exploitative
+    category: strategy
+  sizing_tells:
+    name: Sizing Tells
+    aliases:
+    - Bet Sizing Tells
+    - Sizing Reads
+    - Тайные размеры ставок
+    related:
+    - Exploitative
+    - Continuation Bet
+    category: opponent_modeling
+  weak_sizing:
+    name: Weak Sizing
+    aliases:
+    - Weak Bet Sizing
+    - Weak Sizing Reads
+    - Слабые размеры ставок
+    related:
+    - Exploitative
+    - Continuation Bet
+    category: opponent_modeling
+  equity_denial:
+    name: Equity Denial
+    aliases:
+    - Equity Denial
+    - Отказ от эквити
+    related:
+    - Equity Realization
+    - Continuation Bet
+    category: strategy
+  post_flop_frequency_adjustment:
+    name: Post-Flop Frequency Adjustment
+    aliases:
+    - Post-Flop Strategy Variation
+    - Постфлоп Частотная Коррекция
+    related:
+    - Continuation Bet
+    - Frequencies
+    - Out of Position
+    category: postflop_action
+  board_strength_evaluation:
+    name: Board Strength Evaluation
+    aliases:
+    - Board Texture Assessment
+    - Оценка Силы Доски
+    related:
+    - Range Advantage
+    - Nut Advantage
+    category: strategy
+  lead_frequency_adjustment:
+    name: Lead Frequency Adjustment
+    aliases:
+    - Adjusting Lead Frequencies
+    - Корректировка частоты ведения
+    related:
+    - Donk Bet
+    - Exploitative
+    category: opponent_modeling
+  merged_equity_hand:
+    name: Merged Equity Hand
+    aliases:
+    - Merged Equity
+    - Merged Hands
+    - Смешанные руки
+    related:
+    - Equity Realization
+    - Playability
+    category: strategy
+  trap_range:
+    name: Trap Range
+    aliases:
+    - Trapping Strategy
+    - Trap Hands
+    - Ловушка
+    related:
+    - Continuation Bet
+    - Check-Raise
+    category: strategy
+  small_bet_sizing_on_straight_boards:
+    name: Small Bet Sizing on Straight Boards
+    aliases:
+    - Small Sizing Strategy
+    - Small Bet Strategy
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: betting
+  overfolding_against_small_bets:
+    name: Overfolding Against Small Bets
+    aliases:
+    - Inelastic Folding
+    - Folding Frequency
+    related:
+    - Frequencies
+    - Exploitative
+    category: opponent_modeling
+  medium_strong_hand_strategy:
+    name: Medium Strong Hand Strategy
+    aliases:
+    - Medium Strength Betting
+    - Betting Medium Hands
+    related:
+    - Continuation Bet
+    - Check-Raise
+    category: strategy
+  stabbing_strategy:
+    name: Stabbing Strategy
+    aliases:
+    - Stab
+    - Aggressive Betting
+    - Стратегия тычка
+    related:
+    - Continuation Bet
+    - Bet Sizing
+    - Exploitative
+    category: postflop_action
+  merging_strategy:
+    name: Merging Strategy
+    aliases:
+    - Merged Betting
+    - Смешанная стратегия
+    related:
+    - Bet Sizing
+    - Stack to Pot Ratio
+    category: postflop_action
+  polarized_betting_range:
+    name: Polarized Betting Range
+    aliases:
+    - Polarized Range
+    - Поляризованный диапазон
+    related:
+    - Continuation Bet
+    - GTO
+    category: betting
+  merchy_hands:
+    name: Merchy Hands
+    aliases:
+    - Merchy hands
+    - Merch hands
+    related:
+    - Continuation Bet
+    - Blockers
+    category: postflop_action
+  weak_two_pairs:
+    name: Weak Two Pairs
+    aliases:
+    - Weak two pairs
+    - Слабые две пары
+    related:
+    - Blockers
+    - Equity Realization
+    category: postflop_action
+  raise_folding:
+    name: Raise Folding
+    aliases:
+    - Raise-Fold
+    - Raise Folding Strategy
+    related:
+    - Check-Raise
+    - Frequencies
+    category: postflop_action
+  turning_made_hands_into_bluffs:
+    name: Turning Made Hands into Bluffs
+    aliases:
+    - Made Hand Bluffing
+    - Turning Made Hands
+    related:
+    - Check-Raise
+    - Exploitative
+    category: postflop_action
+  double_barreling_on_ace_high_boards:
+    name: Double Barreling on Ace High Boards
+    aliases:
+    - Double Barrel Strategy
+    - Ace High Double Barrel
+    - Двойная ставка на борде с тузом
+    related:
+    - 3-Bet
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  two_sizing_strategy:
+    name: Two Sizing Strategy
+    aliases:
+    - Two Sizing Approach
+    - Dual Sizing Strategy
+    - Стратегия двух размеров
+    related:
+    - Bet Sizing
+    - Exploitative
+    category: betting
+  bet_folding_strong_made_hands:
+    name: Bet Folding Strong Made Hands
+    aliases:
+    - Bet Fold Strategy
+    - Bet Folding
+    - Стратегия Бет Фолда
+    related:
+    - Continuation Bet
+    - Equity Realization
+    category: postflop_action
+  bluff_catching_on_flushing_runouts:
+    name: Bluff Catching on Flushing Runouts
+    aliases:
+    - Bluff Catching Strategy
+    - Flushing Runout Strategy
+    related:
+    - GTO
+    - Polarized
+    category: postflop_action
+  flop_strategy_adjustments:
+    name: Flop Strategy Adjustments
+    aliases:
+    - Flop Strategy Changes
+    - Изменения стратегии на флопе
+    related:
+    - GTO
+    - Nut Advantage
+    category: strategy
+  gangster_hero_call:
+    name: Gangster Hero Call
+    aliases:
+    - Hero Call
+    - Gangster Call
+    related:
+    - Bluff Catching
+    - Capped Ranges
+    category: strategy
+  trip_categories:
+    name: Trip Categories
+    aliases:
+    - Strong Trips
+    - Medium Trips
+    - Bluff Trips
+    related:
+    - Bluffing
+    - Playability
+    category: strategy
+  opponent_deviation_exploitation:
+    name: Opponent Deviation Exploitation
+    aliases:
+    - Exploiting Opponent Deviations
+    - Оппортунистическая эксплуатация отклонений противника
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  aggressive_player_adjustment:
+    name: Aggressive Player Adjustment
+    aliases:
+    - Adjusting to Aggressive Players
+    - Корректировка против агрессивных игроков
+    related:
+    - Exploitative
+    - Check-Raise
+    category: strategy
+  c_betting_range_in_plo:
+    name: C-Betting Range in PLO
+    aliases:
+    - C-Betting Strategy
+    - C-Betting Frequency
+    - Стратегия продолженной ставки
+    related:
+    - Continuation Bet
+    - Out of Position
+    - Frequencies
+    category: postflop_action
+  board_texture_analysis:
+    name: Board Texture Analysis
+    aliases:
+    - Board Texture Strategy
+    - Board Texture Evaluation
+    - Анализ текстуры доски
+    related:
+    - Range Advantage
+    - Nut Advantage
+    category: strategy
+  randomizer_strategy:
+    name: Randomizer Strategy
+    aliases:
+    - Randomization
+    - Randomizer
+    - Стратегия рандомизации
+    related:
+    - GTO
+    - Frequencies
+    category: strategy
+  c_betting_heuristics:
+    name: C-Betting Heuristics
+    aliases:
+    - C-Betting Strategies
+    - C-Betting Guidelines
+    related:
+    - Continuation Bet
+    - Out of Position
+    - Expected Value
+    category: postflop_action
+  aggressive_check_raising_strategy:
+    name: Aggressive Check-Raising Strategy
+    aliases:
+    - Aggressive Check-Raising
+    - Агрессивная чек-рейз стратегия
+    related:
+    - Check-Raise
+    - Multiway
+    - Single Raised Pot
+    category: postflop_action
+  turn_visibility:
+    name: Turn Visibility
+    aliases:
+    - Turn Awareness
+    - Видимость терна
+    related:
+    - Equity Realization
+    - Dynamic Board
+    category: strategy
+  top_paired_flop_strategy:
+    name: Top Paired Flop Strategy
+    aliases:
+    - Top Pair Strategy
+    - Strategy for Top Paired Boards
+    related:
+    - Check-Raise
+    - Single Raised Pot
+    - Nut Advantage
+    category: postflop_action
+  bottom_paired_flop_strategy:
+    name: Bottom Paired Flop Strategy
+    aliases:
+    - Bottom Pair Strategy
+    - Strategy for Bottom Paired Boards
+    related:
+    - Check-Raise
+    - Single Raised Pot
+    - Nut Advantage
+    category: postflop_action
+  blank_card_strategy:
+    name: Blank Card Strategy
+    aliases:
+    - Blank Card Defense
+    - Blank Card Play
+    - Стратегия пустой карты
+    related:
+    - Dynamic Board
+    - Equity Realization
+    category: postflop_action
+  nut_flush_blocker:
+    name: Nut Flush Blocker
+    aliases:
+    - Nut Flush Blocker Strategy
+    - Nut Flush Defense
+    - Блокер нутового флеша
+    related:
+    - Check-Raise
+    - Equity Realization
+    category: postflop_action
+  donk_shoving_strategy:
+    name: Donk Shoving Strategy
+    aliases:
+    - Donk Shove
+    - Donk Bet Shove
+    - Донк Шов
+    related:
+    - Donk Bet
+    - Equity Realization
+    category: postflop_action
+  leading_range_strategy:
+    name: Leading Range Strategy
+    aliases:
+    - Leading Strategy
+    - Leading Range
+    related:
+    - Donk Bet
+    - Range Advantage
+    - Nut Advantage
+    category: postflop_action
+  polarized_betting_strategy:
+    name: Polarized Betting Strategy
+    aliases:
+    - Polarized Range Betting
+    - Polarized Strategy
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: betting
+  flush_turn_strategy:
+    name: Flush Turn Strategy
+    aliases:
+    - Flush Turn Play
+    - Flush Turn Approach
+    related:
+    - Out of Position
+    - In Position
+    category: postflop_action
+  double_barrelling_blank_turns:
+    name: Double Barrelling Blank Turns
+    aliases:
+    - Double Barrelling
+    - Blank Turn Strategy
+    related:
+    - Continuation Bet
+    - Stack to Pot Ratio
+    - Frequencies
+    category: postflop_action
+  passive_nit:
+    name: Passive Nit
+    aliases:
+    - Passive Player
+    - Timid Player
+    - Пассивный Нит
+    related:
+    - GTO
+    - Exploitative
+    category: opponent_modeling
+  merged_betting_strategy:
+    name: Merged Betting Strategy
+    aliases:
+    - Linear Betting Strategy
+    - Смешанная Стратегия Ставок
+    related:
+    - Betting Strategy
+    category: betting
+  range_protection:
+    name: Range Protection
+    aliases:
+    - Range Defense
+    - Защита диапазона
+    related:
+    - Continuation Bet
+    - Out of Position
+    - Exploitative
+    category: strategy
+  missed_c_bets:
+    name: Missed C-Bets
+    aliases:
+    - Missed Continuation Bets
+    - Пропущенные континуированные ставки
+    related:
+    - Continuation Bet
+    - Out of Position
+    category: postflop_action
+  unprotected_ranges:
+    name: Unprotected Ranges
+    aliases:
+    - Vulnerable Ranges
+    - Unprotected Hand Ranges
+    related:
+    - Exploitative
+    - Range Advantage
+    category: strategy
+  turn_transition:
+    name: Turn Transition
+    aliases:
+    - Turn Card Transition
+    related:
+    - In Position
+    - Out of Position
+    category: postflop_action
+  heads_up_strategy_adjustment:
+    name: Heads Up Strategy Adjustment
+    aliases:
+    - Heads Up Exploitation
+    - Heads Up Tactics
+    related:
+    - Exploitative
+    - GTO
+    - Heads Up
+    category: strategy
+  overfolding:
+    name: Overfolding
+    aliases:
+    - excessive folding
+    - переход к фолду
+    related:
+    - Exploitative
+    category: opponent_modeling
+  understanding_the_why:
+    name: Understanding the Why
+    aliases:
+    - Focus on the Why
+    - Why over What
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  adaptive_strategy:
+    name: Adaptive Strategy
+    aliases:
+    - Adjusting to Opponents
+    - Opponent Modeling
+    related:
+    - Exploitative
+    - Blockers
+    category: strategy
+  limping_strategy_in_heads_up:
+    name: Limping Strategy in Heads Up
+    aliases:
+    - Limping in Heads Up
+    - Heads Up Limping Strategy
+    - Стратегия лимпа в хедз-апе
+    related:
+    - Limp
+    - Heads Up
+    category: preflop_action
+  adjusting_to_wide_ranges:
+    name: Adjusting to Wide Ranges
+    aliases:
+    - Wide Range Adjustments
+    - Adjusting Against Wide Ranges
+    - Корректировка против широких диапазонов
+    related:
+    - 3-Bet
+    - GTO
+    - Range Advantage
+    category: strategy
+  multi_dimensional_leading_range:
+    name: Multi-Dimensional Leading Range
+    aliases:
+    - Multi-Dimensional Lead
+    - Многофункциональный лид
+    related:
+    - Leading Strategy
+    - Out of Position
+    category: postflop_action
+  unblocking_ugly_runouts:
+    name: Unblocking Ugly Runouts
+    aliases:
+    - Unblock Ugly Runouts
+    - Разблокировка некрасивых риверов
+    related:
+    - Floating
+    - Equity Realization
+    category: postflop_action
+  river_donk_exploit:
+    name: River Donk Exploit
+    aliases:
+    - River Donk Strategy
+    - Exploitative Donk Bet
+    related:
+    - Donk Bet
+    - Exploitative
+    category: postflop_action
+  hero_call_strategy:
+    name: Hero Call Strategy
+    aliases:
+    - Hero Calling
+    - Hero Call
+    - героический колл
+    related:
+    - Blockers
+    - GTO
+    - Exploitative
+    category: postflop_action
+  blocking_value_bets:
+    name: Blocking Value Bets
+    aliases:
+    - Value Bet Blocking
+    - блокировка ставок на вэлью
+    related:
+    - Blockers
+    - GTO
+    category: postflop_action
+  blocking_checkbacks:
+    name: Blocking Checkbacks
+    aliases:
+    - Checkback Blocking
+    - блокировка чекбеков
+    related:
+    - Blockers
+    - GTO
+    category: postflop_action
+  asymmetric_3_bet_pot_strategy:
+    name: Asymmetric 3-Bet Pot Strategy
+    aliases:
+    - Asymmetric 3-Bet Strategy
+    - Ассиметричная стратегия 3-бета
+    related:
+    - 3-Bet
+    - Multiway
+    - Short Stack
+    category: strategy
+  medium_strength_hands:
+    name: Medium Strength Hands
+    aliases:
+    - Medium Strength Range
+    - Средние сильные руки
+    related:
+    - Range Advantage
+    - Continuation Bet
+    category: hands
+  range_imbalance:
+    name: Range Imbalance
+    aliases:
+    - Imbalanced Range
+    - Несбалансированный диапазон
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  polarized_bluffing:
+    name: Polarized Bluffing
+    aliases:
+    - Polarized Bluffs
+    - Polarized Betting
+    related:
+    - Continuation Bet
+    - GTO
+    category: postflop_action
+  check_back_the_nuts:
+    name: Check Back the Nuts
+    aliases:
+    - Nut Check Back
+    - Checking Back Strong Hands
+    related:
+    - GTO
+    - Exploitative
+    category: postflop_action
+  turn_play_strategy_on_paired_boards:
+    name: Turn Play Strategy on Paired Boards
+    aliases:
+    - Turn Play on Paired Boards
+    - Paired Board Turn Strategy
+    related:
+    - Check-Raise
+    - Frequencies
+    - Bet Sizing
+    category: postflop_action
+  value_threshold:
+    name: Value Threshold
+    aliases:
+    - Value Range
+    - Value Candidate
+    related:
+    - Value Bet
+    - Polarized Strategy
+    category: strategy
+  leading_range:
+    name: Leading Range
+    aliases:
+    - Lead Strategy
+    - Leading Frequency
+    related:
+    - Check-Raise
+    - Frequencies
+    category: postflop_action
+  polarized_betting:
+    name: Polarized Betting
+    aliases:
+    - Polarized Range
+    - Polarization Strategy
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: betting
+  stack_off_equity_calculation:
+    name: Stack Off Equity Calculation
+    aliases:
+    - stack off equity
+    - stack-off equity calculation
+    related:
+    - Stack to Pot Ratio
+    - Equity Realization
+    category: strategy
+  odds_oracle:
+    name: Odds Oracle
+    aliases:
+    - Odds Oracle software
+    - Odds Oracle tool
+    related:
+    - GTO
+    - Equity Realization
+    category: opponent_modeling
+  one_bet_size_approach:
+    name: One Bet Size Approach
+    aliases:
+    - Single Sizing Strategy
+    related:
+    - Expected Value
+    - Frequencies
+    category: betting
+  polarized_checking_range:
+    name: Polarized Checking Range
+    aliases:
+    - Polarized Check Strategy
+    related:
+    - Nut Advantage
+    - Blockers
+    category: postflop_action
+  polarized_donking_strategy:
+    name: Polarized Donking Strategy
+    aliases:
+    - Polarized Donk
+    - Polarized Leading Strategy
+    related:
+    - Donk Bet
+    - GTO
+    category: strategy
+  threshold_adjustment_for_betting:
+    name: Threshold Adjustment for Betting
+    aliases:
+    - Betting Threshold Adjustment
+    related:
+    - GTO
+    - Out of Position
+    category: strategy
+  check_raise_folding:
+    name: Check Raise Folding
+    aliases:
+    - Check Raise Fold
+    - Check-Raise-Fold
+    - Чек-рейз-фолд
+    related:
+    - Check-Raise
+    - Facing a 3-Bet
+    category: postflop_action
+  high_frequency_check_raises:
+    name: High Frequency Check Raises
+    aliases:
+    - High-Frequency Check Raise
+    - Чек-рейз высокой частоты
+    related:
+    - Check-Raise
+    - Frequencies
+    category: postflop_action
+  equity_of_weak_draws:
+    name: Equity of Weak Draws
+    aliases:
+    - Weak Draw Equity
+    - Эффективность слабых дро
+    related:
+    - Equity Realization
+    - Check-Raise
+    category: strategy
+  leading_on_paired_turns:
+    name: Leading on Paired Turns
+    aliases:
+    - Paired Turn Leading
+    - Leading on Pairing Turns
+    related:
+    - Out of Position
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  donking_strategy_from_small_blind:
+    name: Donking Strategy from Small Blind
+    aliases:
+    - Small Blind Donking
+    - SB Donk Strategy
+    related:
+    - Donk Bet
+    - Small Blind
+    - Big Blind
+    category: strategy
+  preflop_range_interaction:
+    name: Preflop Range Interaction
+    aliases:
+    - Range Interaction
+    - Preflop Range Dynamics
+    related:
+    - Range Advantage
+    - GTO
+    category: strategy
+  leading_strategy_on_paired_boards:
+    name: Leading Strategy on Paired Boards
+    aliases:
+    - Leading on Paired Boards
+    - Paired Board Leading Strategy
+    related:
+    - 3-Bet
+    - Out of Position
+    - Leading
+    category: postflop_action
+  leading_strategy_on_straight_boards:
+    name: Leading Strategy on Straight Boards
+    aliases:
+    - Leading on Straight Boards
+    - Стратегия ведения на прямых досках
+    related:
+    - Donk Bet
+    - Range Advantage
+    - Exploitative
+    category: postflop_action
+  monotone_board_exploits:
+    name: Monotone Board Exploits
+    aliases:
+    - Monotone Exploits
+    - Exploits on Monotone Boards
+    related:
+    - Check-Raise
+    - Exploitative
+    category: strategy
+  opponent_deviation_analysis:
+    name: Opponent Deviation Analysis
+    aliases:
+    - Deviation Analysis
+    - Анализ отклонений противника
+    related:
+    - Exploitative
+    category: opponent_modeling
+  adaptive_betting_strategy:
+    name: Adaptive Betting Strategy
+    aliases:
+    - Adaptive Strategy
+    - Адаптивная стратегия
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  range_interaction:
+    name: Range Interaction
+    aliases:
+    - Range Dynamics
+    - Взаимодействие диапазонов
+    related:
+    - Range Advantage
+    - Equity Realization
+    category: opponent_modeling
+  c_bet_frequency_adjustment:
+    name: C-Bet Frequency Adjustment
+    aliases:
+    - C-Bet Frequency Tuning
+    - C-Bet Strategy Variation
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: postflop_action
+  dynamic_board_assessment:
+    name: Dynamic Board Assessment
+    aliases:
+    - Dynamic Board Evaluation
+    - Оценка динамической доски
+    related:
+    - Wet Board
+    - Dry Board
+    category: postflop_action
+  dynamic_postflop_strategy:
+    name: Dynamic Postflop Strategy
+    aliases:
+    - Dynamic Strategy
+    - Динамическая стратегия
+    related:
+    - GTO
+    - Exploitative
+    - Out of Position
+    category: strategy
+  adjusting_to_opponent's_range:
+    name: Adjusting to Opponent's Range
+    aliases:
+    - Opponent Range Adjustment
+    - Корректировка диапазона противника
+    related:
+    - Range Advantage
+    - VPIP
+    category: opponent_modeling
+  triple_barrel_strategy:
+    name: Triple Barrel Strategy
+    aliases:
+    - Triple Barrel Play
+    - Тройной баррель
+    related:
+    - GTO
+    - Exploitative
+    - Frequencies
+    category: postflop_action
+  bluff_to_value_ratio:
+    name: Bluff to Value Ratio
+    aliases:
+    - Bluff/Value Ratio
+    - Соотношение блефа к стоимости
+    related:
+    - GTO
+    - Exploitative
+    category: betting
+  positional_adjustments_in_single_raised_pots:
+    name: Positional Adjustments in Single Raised Pots
+    aliases:
+    - Positional Strategy Adjustments
+    - Позиционные Корректировки
+    related:
+    - Single Raised Pot
+    - Early Position
+    - Continuation Bet
+    category: strategy
+  adjusting_strategy_against_short_stacks:
+    name: Adjusting Strategy Against Short Stacks
+    aliases:
+    - Short Stack Strategy Adjustment
+    - Стратегия против коротких стеков
+    related:
+    - Short Stack
+    - Stack to Pot Ratio
+    - Continuation Bet
+    category: strategy
+  two_street_hand:
+    name: Two Street Hand
+    aliases:
+    - Two Street Strategy
+    - Две улицы
+    related:
+    - Stack to Pot Ratio
+    - Check-Raise
+    category: strategy
+  probing_strategy:
+    name: Probing Strategy
+    aliases:
+    - Probing Technique
+    - Probing Approach
+    related:
+    - Probe Bet
+    - Out of Position
+    category: postflop_action
+  heuristic_probing:
+    name: Heuristic Probing
+    aliases:
+    - Heuristic Strategy
+    - Heuristic Approach
+    related:
+    - Probe Bet
+    - Equity Realization
+    category: strategy
+  river_defense_after_checking_back_turn:
+    name: River Defense After Checking Back Turn
+    aliases:
+    - River Defense
+    - River Check Back Defense
+    - Защита на ривере после чек-бэка на терне
+    related:
+    - Defending the BB
+    - GTO
+    - Leaks
+    category: postflop_action
+  cognitive_bias_in_bluff_catching:
+    name: Cognitive Bias in Bluff Catching
+    aliases:
+    - Bluff Catching Bias
+    - Cognitive Bias in Poker
+    - Когнитивный БIAS в покере
+    related:
+    - GTO
+    - Leaks
+    category: opponent_modeling
+  inelastic_calling_range:
+    name: Inelastic Calling Range
+    aliases:
+    - Inelastic Range
+    - Rigid Calling Range
+    - Неэластичный диапазон
+    related:
+    - Frequencies
+    - GTO
+    category: postflop_action
+  river_checking_frequencies:
+    name: River Checking Frequencies
+    aliases:
+    - River Check Frequencies
+    - Частоты Чеков на Ривере
+    related:
+    - Frequencies
+    - Out of Position
+    category: postflop_action
+  turn_to_river_range_shift:
+    name: Turn to River Range Shift
+    aliases:
+    - Range Shift from Turn to River
+    - Смещение Рейнджа с Тёрна на Ривер
+    related:
+    - Range Advantage
+    - Out of Position
+    category: strategy
+  board_changing_runouts:
+    name: Board Changing Runouts
+    aliases:
+    - Changing Board Runouts
+    - Изменяющиеся Рунуты
+    related:
+    - Dynamic Board
+    - Out of Position
+    category: postflop_action
+  c_betting_strategy_based_on_board_texture:
+    name: C-Betting Strategy Based on Board Texture
+    aliases:
+    - Board Texture C-Betting
+    - C-Betting by Board Type
+    related:
+    - Continuation Bet
+    - Out of Position
+    - Range Advantage
+    category: postflop_action
+  heuristic_c_betting_guidelines:
+    name: Heuristic C-Betting Guidelines
+    aliases:
+    - C-Betting Heuristics
+    - C-Betting Rules
+    related:
+    - Continuation Bet
+    - Frequencies
+    category: strategy
+  dynamic_board_texture_strategy:
+    name: Dynamic Board Texture Strategy
+    aliases:
+    - Dynamic Board Strategy
+    - Strategy for Dynamic Boards
+    - Стратегия для динамических досок
+    related:
+    - Dry Board
+    - Wet Board
+    category: strategy
+  bluffing_thresholds:
+    name: Bluffing Thresholds
+    aliases:
+    - Bluffing Decision Points
+    - Thresholds for Bluffing
+    related:
+    - Bluffing
+    - Expected Value
+    category: strategy
+  population_modeling:
+    name: Population Modeling
+    aliases:
+    - Player Pool Analysis
+    - Population Reads
+    related:
+    - Exploitative
+    - GTO
+    category: opponent_modeling
+  probing_flushing_turns:
+    name: Probing Flushing Turns
+    aliases:
+    - Flushing Turn Probe
+    - Probe Bet on Flushing Turns
+    related:
+    - Exploitative
+    - Continuation Bet
+    - Out of Position
+    category: postflop_action
+  simplified_c_betting_strategy:
+    name: Simplified C-Betting Strategy
+    aliases:
+    - Simple C-Bet Strategy
+    - Simplified Continuation Bet Approach
+    related:
+    - Continuation Bet
+    - GTO
+    category: strategy
+  polarized_checking_ranges:
+    name: Polarized Checking Ranges
+    aliases:
+    - Polarized Check Strategy
+    - Поляризованные диапазоны чеков
+    related:
+    - Continuation Bet
+    - GTO
+    category: postflop_action
+  c_bet_sizing_strategy:
+    name: C-Bet Sizing Strategy
+    aliases:
+    - C-Bet Sizing
+    - C-Bet Strategy
+    related:
+    - Continuation Bet
+    - Dynamic Board
+    category: postflop_action
+  heuristic_decision_making:
+    name: Heuristic Decision Making
+    aliases:
+    - Heuristic Strategy
+    - Heuristic Approach
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  vehicle_analogy_for_betting:
+    name: Vehicle Analogy for Betting
+    aliases:
+    - Betting Analogy
+    - Vehicle Metaphor
+    related: []
+    category: strategy
+  indifference_in_decision_making:
+    name: Indifference in Decision Making
+    aliases:
+    - Indifference Strategy
+    - Indifferent Play
+    related:
+    - Equity Realization
+    - Continuation Bet
+    category: strategy
+  merginess_in_betting:
+    name: Merginess in Betting
+    aliases:
+    - Merginess Strategy
+    - Merginess Concept
+    related:
+    - Continuation Bet
+    - In Position
+    - Out of Position
+    category: betting
+  lockdown_boards:
+    name: Lockdown Boards
+    aliases:
+    - Static Textures
+    - Статические текстуры
+    related:
+    - Dry Board
+    - Wet Board
+    category: postflop_action
+  stabbing_in_position:
+    name: Stabbing in Position
+    aliases:
+    - Stabbing
+    - In-Position Stabbing
+    - Ставка в позиции
+    related:
+    - In Position
+    - Bet Sizing
+    - Continuation Bet
+    category: postflop_action
+  inelasticity_of_opponent's_range:
+    name: Inelasticity of Opponent's Range
+    aliases:
+    - Inelastic Range
+    - Невозможность изменения диапазона
+    related:
+    - Equity Realization
+    - Bet Sizing
+    category: opponent_modeling
+  stack_off_thresholds:
+    name: Stack-Off Thresholds
+    aliases:
+    - Stack-Off Criteria
+    - Stack-Off Guidelines
+    related:
+    - GTO
+    - Equity Realization
+    - 3-Bet
+    category: strategy
+  turn_determined_hands:
+    name: Turn Determined Hands
+    aliases:
+    - Turn Dependent Hands
+    related:
+    - Equity Realization
+    category: hands
+  dynamic_strategy:
+    name: Dynamic Strategy
+    aliases:
+    - Dynamic Play
+    - Dynamic Approach
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  static_strategy:
+    name: Static Strategy
+    aliases:
+    - Static Play
+    - Static Approach
+    related:
+    - GTO
+    - Exploitative
+    category: strategy
+  min_click_raise_strategy:
+    name: Min Click Raise Strategy
+    aliases:
+    - Min Raise Strategy
+    - Min Clickback Strategy
+    related:
+    - Raise First In
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  small_river_bet_strategy:
+    name: Small River Bet Strategy
+    aliases:
+    - Small Bet on River
+    - Small River Betting
+    - Стратегия малой ставки на ривере
+    related:
+    - In Position
+    - Out of Position
+    - Exploitative
+    category: postflop_action
+  weak_checking_range_exploitation:
+    name: Weak Checking Range Exploitation
+    aliases:
+    - Exploiting Weak Checks
+    - Exploitation of Weak Checking Ranges
+    - Эксплуатация слабых диапазонов чеков
+    related:
+    - Exploitative
+    - Frequencies
+    category: opponent_modeling
+  range_protection_paradox:
+    name: Range Protection Paradox
+    aliases:
+    - Range Protection Dilemma
+    related:
+    - Range Protection
+    - Exploitative
+    category: strategy
+  unorthodox_aggression:
+    name: Unorthodox Aggression
+    aliases:
+    - Unconventional Aggression
+    - Неортодоксальная агрессия
+    related:
+    - Exploitative
+    - Continuation Bet
+    category: strategy
+  inelasticity_in_betting:
+    name: Inelasticity in Betting
+    aliases:
+    - Betting Inelasticity
+    - Неэластичность ставок
+    related:
+    - Frequencies
+    - Exploitative
+    category: betting
+  exploitative_turn_check_raise_bluff:
+    name: Exploitative Turn Check-Raise Bluff
+    aliases:
+    - Exploitative Check-Raise Bluff
+    - Turn Check-Raise Bluff
+    - Эксплуатативный чек-рейз блеф
+    related:
+    - Check-Raise
+    - Exploitative
+    category: postflop_action
+  blocker_effects:
+    name: Blocker Effects
+    aliases:
+    - Blocker Strategy
+    - Blocker Dynamics
+    related:
+    - Blockers
+    - Equity Realization
+    category: strategy
+  checking_range_on_two_toned_boards:
+    name: Checking Range on Two-Toned Boards
+    aliases:
+    - Two-Tone Checking Strategy
+    related:
+    - Out of Position
+    - GTO
+    category: postflop_action
+  merged_c_betting_range:
+    name: Merged C-Betting Range
+    aliases:
+    - Merged Continuation Betting Range
+    related:
+    - Continuation Bet
+    - Exploitative
+    category: postflop_action
+  adjusting_check_raising_range:
+    name: Adjusting Check-Raising Range
+    aliases:
+    - Adjusting Check-Raise Strategy
+    related:
+    - Check-Raise
+    - Exploitative
+    category: strategy
+  bet_folding_strategy:
+    name: Bet Folding Strategy
+    aliases:
+    - Bet Fold Tactics
+    - Bet Folding Approach
+    related:
+    - Equity Realization
+    - Exploitative
+    category: postflop_action
+  mediocre_hand_strategy:
+    name: Mediocre Hand Strategy
+    aliases:
+    - Mediocre Hand Play
+    - Средняя рука стратегия
+    related:
+    - Equity Realization
+    - Exploitative
+    category: strategy
+  finding_bluffs:
+    name: Finding Bluffs
+    aliases:
+    - Bluff Identification
+    - Bluffing Strategy
+    related:
+    - Blockers
+    - GTO
+    category: postflop_action
+  polarity_in_betting:
+    name: Polarity in Betting
+    aliases:
+    - Polarized Betting Strategy
+    related:
+    - GTO
+    - Continuation Bet
+    category: strategy
+  unblocking_the_folding_range:
+    name: Unblocking the Folding Range
+    aliases:
+    - Folding Range Strategy
+    related:
+    - Blockers
+    - GTO
+    category: strategy
+  bet_folding:
+    name: Bet Folding
+    aliases:
+    - Bet Fold
+    - Бет Фолд
+    related:
+    - Continuation Bet
+    - Equity Realization
+    category: postflop_action
+  semi_bluffing:
+    name: Semi Bluffing
+    aliases:
+    - Semi Bluff
+    - Семи Блеф
+    related:
+    - Bluffing
+    - Equity Realization
+    category: postflop_action
+  dry_nut_flush_draw:
+    name: Dry Nut Flush Draw
+    aliases:
+    - Dry Nut Flush
+    - Сухой Нут Флеш
+    related:
+    - Blockers
+    - Nut Advantage
+    category: hands
+  ace_blocker_importance:
+    name: Ace Blocker Importance
+    aliases:
+    - Ace Blocking Strategy
+    - Ace Blocker Concept
+    related:
+    - Blockers
+    - Expected Value
+    category: strategy
+  efficiency_of_hands:
+    name: Efficiency of Hands
+    aliases:
+    - Hand Efficiency
+    - Efficiency in Poker
+    related:
+    - Leading
+    - Check-Raise
+    category: strategy
+  leading_strategy_in_3_bet_pots:
+    name: Leading Strategy in 3-Bet Pots
+    aliases:
+    - Lead in 3-Bet Pots
+    - Лидирование в 3-бет потах
+    related:
+    - 3-Bet
+    - Continuation Bet
+    - Donk Bet
+    category: postflop_action
+  mediocre_hands_leading:
+    name: Mediocre Hands Leading
+    aliases:
+    - Leading with Medium Strength Hands
+    - Лидирование со средними руками
+    related:
+    - Check-Raise
+    - Donk Bet
+    category: postflop_action
+  value_bet_leading:
+    name: Value Bet Leading
+    aliases:
+    - Leading for Value
+    - Лидирование для вэлю
+    related:
+    - Continuation Bet
+    - Donk Bet
+    category: postflop_action
+  high_donk_frequency_strategy:
+    name: High Donk Frequency Strategy
+    aliases:
+    - High Frequency Donking
+    - Частая Донки Стратегия
+    related:
+    - Donk Bet
+    - Single Raised Pot
+    - Out of Position
+    category: strategy
+  heuristic_donking:
+    name: Heuristic Donking
+    aliases:
+    - Heuristic Strategy for Donking
+    - Эвристическая Донки
+    related:
+    - Donk Bet
+    - Equity Realization
+    - Playability
+    category: strategy
+  dynamic_river_play:
+    name: Dynamic River Play
+    aliases:
+    - Dynamic Play on the River
+    - Динамическая игра на ривере
+    related:
+    - Out of Position
+    - Bet Sizing
+    - Expected Value
+    category: postflop_action
+  zero_ev_spot:
+    name: Zero EV Spot
+    aliases:
+    - Zero Expected Value Spot
+    - Ситуация нулевой ожидаемой ценности
+    related:
+    - Expected Value
+    - Blockers
+    category: opponent_modeling
+  relevant_blockers:
+    name: Relevant Blockers
+    aliases:
+    - relevant blockers
+    - значимые блокеры
+    related:
+    - Blockers
+    - Frequencies
+    category: strategy
+  reverse_blockers:
+    name: Reverse Blockers
+    aliases:
+    - reverse blockers
+    - обратные блокеры
+    related:
+    - Blockers
+    category: strategy
+  burden_of_defense:
+    name: Burden of Defense
+    aliases:
+    - Defense Burden
+    - Burden of Defense in Multiway Pots
+    related:
+    - Multiway
+    - Exploitative
+    category: strategy
+  linear_betting_strategy:
+    name: Linear Betting Strategy
+    aliases:
+    - Linear Bet Sizing
+    - Linear Betting Approach
+    related:
+    - Exploitative
+    - Multiway
+    category: betting
+  range_checking_strategy:
+    name: Range Checking Strategy
+    aliases:
+    - Range Check
+    - Стратегия проверки диапазона
+    related:
+    - Out of Position
+    - Continuation Bet
+    - Frequencies
+    category: strategy
+  high_frequency_betting_on_straight_boards:
+    name: High Frequency Betting on Straight Boards
+    aliases:
+    - High Frequency Bet
+    - Частая ставка
+    related:
+    - 3-Bet
+    - Continuation Bet
+    - Equity Realization
+    category: betting
+  polarized_c_betting_range:
+    name: Polarized C-Betting Range
+    aliases:
+    - Polarized C-Betting Range
+    - Поляризованный диапазон C-бета
+    related:
+    - Continuation Bet
+    - Range Advantage
+    category: strategy
+  position_impact_on_strategy:
+    name: Position Impact on Strategy
+    aliases:
+    - Position-Based Strategy
+    - Стратегия на основе позиции
+    related:
+    - Out of Position
+    - In Position
+    - 3-Bet
+    category: strategy
+  aggression_after_check_back:
+    name: Aggression After Check Back
+    aliases:
+    - Aggression After Check Back
+    - Агрессия после чек-бэка
+    related:
+    - In Position
+    - Out of Position
+    category: strategy
+  c_betting_frequencies_on_paired_boards:
+    name: C-Betting Frequencies on Paired Boards
+    aliases:
+    - C-Bet Frequencies
+    - Частоты C-Bet
+    related:
+    - Continuation Bet
+    - Paired Boards
+    - Frequencies
+    category: postflop_action
+  equity_advantage_on_low_pair_boards:
+    name: Equity Advantage on Low Pair Boards
+    aliases:
+    - Low Pair Equity Advantage
+    - Преимущество эквити на низких парах
+    related:
+    - Range Advantage
+    - Continuation Bet
+    category: strategy
